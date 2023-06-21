@@ -13,7 +13,7 @@
 <h3> 🛠 &nbsp;Tech Stack</h3>
 
 - 💻 &nbsp;
-  ![Elixir](https://img.shields.io/badge/-Elixir-333333?style=flat&logo=python)
+  ![Elixir](https://img.shields.io/badge/-Elixir-333333?style=flat&logo=elixir)
   ![Python](https://img.shields.io/badge/-Python-333333?style=flat&logo=python)
   ![Java](https://img.shields.io/badge/-Java-333333?style=flat&logo=Java&logoColor=007396)
 - 🌐 &nbsp;

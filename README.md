@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/AVS1508/jamesnjovu/master/assets/Aditya%20Vikram%20Singh%20Banner.png">
+<img src="https://media.licdn.com/dms/image/D5635AQEscHz-JRXp4A/profile-framedphoto-shrink_200_200/0/1647022732313?e=1687953600&v=beta&t=rpa8OBdOc9374Kf4Xqh_RVMCTkkGUBe3GnMbcqFoumU">
 
 <h2> Hey there! I'm James</h2>
 
@@ -50,7 +50,7 @@
 <h3> 🤝🏻 &nbsp;Connect with Me </h3>
 
 <p align="center">
-<a href="https://www.adityavsingh.com/"><img alt="Website" src="https://img.shields.io/badge/Website-www.adityavsingh.com-blue?style=flat-square&logo=google-chrome"></a>
+<a href="https://github.com/jamesnjovu"><img alt="Website" src="https://img.shields.io/badge/Website-www.adityavsingh.com-blue?style=flat-square&logo=google-chrome"></a>
 <a href="https://www.linkedin.com/in/AVS1508/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-Aditya%20Vikram%20Singh-blue?style=flat-square&logo=linkedin"></a>
 <a href="https://www.instagram.com/adityavs_/"><img alt="Instagram" src="https://img.shields.io/badge/Instagram-adityavs__-blue?style=flat-square&logo=instagram"></a>
 <a href="mailto:njovujames@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-avsingh@umass.edu-blue?style=flat-square&logo=gmail"></a>

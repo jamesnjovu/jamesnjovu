@@ -1,4 +1,4 @@
-<img style="border-radius: 50%" src="https://media.licdn.com/dms/image/D5635AQEscHz-JRXp4A/profile-framedphoto-shrink_200_200/0/1647022732313?e=1687953600&v=beta&t=rpa8OBdOc9374Kf4Xqh_RVMCTkkGUBe3GnMbcqFoumU">
+<img style="border-radius: 50%" src="https://media.licdn.com/dms/image/D5635AQEscHz-JRXp4A/profile-framedphoto-shrink_200_200/0/1647022732313">
 
 <h2> Hey there! I'm James</h2>
 

@@ -21,13 +21,14 @@
   ![JavaScript](https://img.shields.io/badge/-JavaScript-333333?style=flat&logo=javascript)
   ![Bootstrap](https://img.shields.io/badge/-Bootstrap-333333?style=flat&logo=bootstrap&logoColor=563D7C)
   ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-333333?style=flat&logo=tailwindcss)
-  ![Phoenix Liveview](https://img.shields.io/badge/-Phoenix%20Liveview-333333?style=flat&logo=phoenix)
+  ![Phoenix Liveview](https://img.shields.io/badge/-Phoenix%20Liveview-333333?style=flat&logo=phoenixframework)
   ![Node.js](https://img.shields.io/badge/-Node.js-333333?style=flat&logo=node.js)
   ![React](https://img.shields.io/badge/-React-333333?style=flat&logo=react)
 - 🛢 &nbsp;
   ![MySQL](https://img.shields.io/badge/-MySQL-333333?style=flat&logo=mysql)
   ![PostgresSQL](https://img.shields.io/badge/-PostgresSQL-333333?style=flat&logo=postgresql)
   ![MSSQL](https://img.shields.io/badge/-MSSQL-333333?style=flat&logo=mssql)
+  ![Oracle](https://img.shields.io/badge/-Oracle-333333?style=flat&logo=oracle)
 - ⚙️ &nbsp;
   ![Git](https://img.shields.io/badge/-Git-333333?style=flat&logo=git)
   ![GitHub](https://img.shields.io/badge/-GitHub-333333?style=flat&logo=github)
@@ -36,7 +37,6 @@
   ![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ%20IDEA-333333?style=flat&logo=intellij)
 - 🖥 &nbsp;
   ![Photoshop](https://img.shields.io/badge/-Photoshop-333333?style=flat&logo=adobe-photoshop)
-  ![InDesign](https://img.shields.io/badge/-InDesign-333333?style=flat&logo=adobe-indesign)
 
 <br/>
 

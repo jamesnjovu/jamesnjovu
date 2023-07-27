@@ -14,7 +14,6 @@
 - 💻 &nbsp;
   ![Elixir](https://img.shields.io/badge/-Elixir-333333?style=flat&logo=elixir)
   ![Python 3](https://img.shields.io/badge/-Python-333333?style=flat&logo=python)
-  ![Ras PHP](https://img.shields.io/badge/-Php-333333?style=flat&logo=php)
 - 🌐 &nbsp;
   ![HTML5](https://img.shields.io/badge/-HTML5-333333?style=flat&logo=HTML5)
   ![CSS3](https://img.shields.io/badge/-CSS3-333333?style=flat&logo=CSS3&logoColor=1572B6)

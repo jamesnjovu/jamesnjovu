@@ -1,0 +1,40 @@
+name: Update GitLab Stats in README
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs daily
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Repo
+        uses: actions/checkout@v3
+
+      - name: Clone GitLab Repo
+        run: |
+          git clone --mirror https://oauth2:${{ secrets.GITLAB_TOKEN }}@git.probasegroup.com/your-group/your-repo.git
+          cd your-repo.git
+
+          # Extract GitLab stats
+          commit_count=$(git rev-list --count HEAD)
+          top_contributors=$(git shortlog -s -n --all | head -5)
+
+          # Update README
+          echo "### GitLab Repository Stats (Updated: $(date))" > stats.md
+          echo "- **Total Commits:** $commit_count" >> stats.md
+          echo "- **Top Contributors:**" >> stats.md
+          echo "$top_contributors" >> stats.md
+
+          mv stats.md ../
+          cd ../
+
+      - name: Update README
+        run: |
+          cat stats.md >> README.md
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@github.com"
+          git add README.md
+          git commit -m "Update GitLab stats" || echo "No changes to commit"
+          git push origin main

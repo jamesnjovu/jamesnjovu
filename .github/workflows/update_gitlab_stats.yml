@@ -30,14 +30,28 @@ jobs:
           # Get personal contribution stats
           CONTRIBUTIONS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events" | jq length)
 
-          # Update README
-          echo "### 🚀 My GitLab Contributions (Updated: $(date))" > stats.md
-          echo "- **Total Commits:** $TOTAL_COMMITS" >> stats.md
-          echo "- **Total Merge Requests:** $TOTAL_MRS" >> stats.md
-          echo "- **Total Issues Opened:** $TOTAL_ISSUES" >> stats.md
-          echo "- **Total Contributions:** $CONTRIBUTIONS" >> stats.md
+          # Preserve original README and update only GitLab stats section
+          START_MARKER="<!-- START GITLAB STATS -->"
+          END_MARKER="<!-- END GITLAB STATS -->"
 
-          mv stats.md README.md
+          NEW_STATS=$(cat <<EOF
+          $START_MARKER
+          ### 🚀 My GitLab Contributions (Updated: $(date))
+          - **Total Commits:** $TOTAL_COMMITS  
+          - **Total Merge Requests:** $TOTAL_MRS  
+          - **Total Issues Opened:** $TOTAL_ISSUES  
+          - **Total Contributions:** $CONTRIBUTIONS  
+          $END_MARKER
+          EOF
+          )
+
+          # Insert stats in README while keeping other content intact
+          awk -v new_stats="$NEW_STATS" '
+          BEGIN {found=0}
+          {if ($0 == "<!-- START GITLAB STATS -->") {found=1; print new_stats; next} }
+          !found {print}
+          {if ($0 == "<!-- END GITLAB STATS -->") {found=0} }
+          ' README.md > README.tmp && mv README.tmp README.md
 
       - name: Commit & Push Changes
         run: |

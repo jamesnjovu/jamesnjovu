@@ -2,7 +2,7 @@ name: Update GitLab Stats in README
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs daily
+    - cron: '0 0 * * *'  # Runs daily at midnight
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
@@ -12,29 +12,37 @@ jobs:
       - name: Checkout GitHub Repo
         uses: actions/checkout@v3
 
-      - name: Clone GitLab Repo
+      - name: Fetch GitLab Contribution Stats
         run: |
-          git clone --mirror https://oauth2:${{ secrets.GITLAB_TOKEN }}@git.probasegroup.com/your-group/your-repo.git
-          cd your-repo.git
+          GITLAB_TOKEN="${{ secrets.GITLAB_TOKEN }}"
+          GITLAB_HOST="https://git.probasegroup.com"
+          GITLAB_USER_ID="james"
 
-          # Extract GitLab stats
-          commit_count=$(git rev-list --count HEAD)
-          top_contributors=$(git shortlog -s -n --all | head -5)
+          # Get total commits across all projects
+          TOTAL_COMMITS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=pushed" | jq '[.[] | select(.action_name=="pushed")] | length')
+
+          # Get total merge requests created
+          TOTAL_MRS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=merged" | jq length)
+
+          # Get total issues created
+          TOTAL_ISSUES=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=opened" | jq length)
+
+          # Get personal contribution stats
+          CONTRIBUTIONS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events" | jq length)
 
           # Update README
-          echo "### GitLab Repository Stats (Updated: $(date))" > stats.md
-          echo "- **Total Commits:** $commit_count" >> stats.md
-          echo "- **Top Contributors:**" >> stats.md
-          echo "$top_contributors" >> stats.md
+          echo "### 🚀 My GitLab Contributions (Updated: $(date))" > stats.md
+          echo "- **Total Commits:** $TOTAL_COMMITS" >> stats.md
+          echo "- **Total Merge Requests:** $TOTAL_MRS" >> stats.md
+          echo "- **Total Issues Opened:** $TOTAL_ISSUES" >> stats.md
+          echo "- **Total Contributions:** $CONTRIBUTIONS" >> stats.md
 
-          mv stats.md ../
-          cd ../
+          mv stats.md README.md
 
-      - name: Update README
+      - name: Commit & Push Changes
         run: |
-          cat stats.md >> README.md
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
           git add README.md
-          git commit -m "Update GitLab stats" || echo "No changes to commit"
+          git commit -m "Updated GitLab stats" || echo "No changes to commit"
           git push origin main

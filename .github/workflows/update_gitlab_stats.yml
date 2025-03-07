@@ -61,9 +61,12 @@ jobs:
           ' README.md > README.tmp && mv README.tmp README.md
 
       - name: Commit & Push Changes
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
           git add README.md
           git commit -m "Updated GitLab stats" || echo "No changes to commit"
-          git push origin main
+          git push https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main
+

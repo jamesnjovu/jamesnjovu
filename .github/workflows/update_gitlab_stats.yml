@@ -66,12 +66,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
-          
-          git fetch origin main  # Ensure we have the latest changes
-          git reset --hard origin/main  # Force sync with remote
-          
+
+          git pull --rebase origin main  # Pull the latest changes before committing
+
           git add README.md
           git commit -m "Updated GitLab stats" || echo "No changes to commit"
-          
-          git push https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main --force
+
+          git push https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main
 

@@ -72,5 +72,5 @@ jobs:
           git add README.md
           git commit -m "Updated GitLab stats" || echo "No changes to commit"
 
-          git push https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main
+          git push main
 

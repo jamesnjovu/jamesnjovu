@@ -18,17 +18,24 @@ jobs:
           GITLAB_HOST="gitlab.probasegroup.com"
           GITLAB_USER_ID="james"
 
-          # Get total commits across all projects
-          TOTAL_COMMITS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=pushed" | jq '[.[] | select(.action_name=="pushed")] | length')
+          CURRENT_YEAR=$(date +%Y)
+          LAST_YEAR=$((CURRENT_YEAR - 1))
 
-          # Get total merge requests created
-          TOTAL_MRS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=merged" | jq length)
+          # Get total commits in 2025
+          TOTAL_COMMITS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=pushed&after=${CURRENT_YEAR}-01-01" | jq length)
 
-          # Get total issues created
-          TOTAL_ISSUES=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=opened" | jq length)
+          # Get total Merge Requests (PRs)
+          TOTAL_PRS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=merged&after=${CURRENT_YEAR}-01-01" | jq length)
 
-          # Get personal contribution stats
-          CONTRIBUTIONS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events" | jq length)
+          # Get total issues opened
+          TOTAL_ISSUES=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=opened&after=${CURRENT_YEAR}-01-01" | jq length)
+
+          # Get total contributions from last year
+          TOTAL_CONTRIBUTIONS_LAST_YEAR=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?after=${LAST_YEAR}-01-01&before=${CURRENT_YEAR}-01-01" | jq length)
 
           # Preserve original README and update only GitLab stats section
           START_MARKER="<!-- START GITLAB STATS -->"
@@ -37,10 +44,10 @@ jobs:
           NEW_STATS=$(cat <<EOF
           $START_MARKER
           ### 🚀 My GitLab Contributions (Updated: $(date))
-          - **Total Commits:** $TOTAL_COMMITS  
-          - **Total Merge Requests:** $TOTAL_MRS  
+          - **Total Commits (2025):** $TOTAL_COMMITS  
+          - **Total PRs (Merge Requests):** $TOTAL_PRS  
           - **Total Issues Opened:** $TOTAL_ISSUES  
-          - **Total Contributions:** $CONTRIBUTIONS  
+          - **Total Contributions (Last Year - $LAST_YEAR):** $TOTAL_CONTRIBUTIONS_LAST_YEAR  
           $END_MARKER
           EOF
           )

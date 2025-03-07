@@ -43,6 +43,7 @@
 <!-- START GITLAB STATS -->
 <!-- GitLab stats will be inserted here -->
 <!-- END GITLAB STATS -->
+
 <br>
 
 <a href="https://github.com/jamesnjovu">

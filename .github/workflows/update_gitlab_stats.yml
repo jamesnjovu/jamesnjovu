@@ -67,7 +67,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
 
-          git pull --rebase origin main  # Pull the latest changes before committing
+          git pull --rebase origin main || git reset --hard origin/main  # ✅ Ensures the latest changes are present
 
           git add README.md
           git commit -m "Updated GitLab stats" || echo "No changes to commit"

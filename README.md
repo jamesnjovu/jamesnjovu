@@ -40,6 +40,11 @@
 
 <br/>
 
+<!-- START GITLAB STATS -->
+<!-- GitLab stats will be inserted here -->
+<!-- END GITLAB STATS -->
+<br>
+
 <a href="https://github.com/jamesnjovu">
   <img height="180em" src="https://github-readme-stats.vercel.app/api?username=jamesnjovu&theme=buefy&show_icons=true" />
   <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=jamesnjovu&theme=buefy&layout=compact" />

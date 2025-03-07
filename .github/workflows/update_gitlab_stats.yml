@@ -72,5 +72,5 @@ jobs:
           git add README.md
           git commit -m "Updated GitLab stats" || echo "No changes to commit"
 
-          git push main
+          git push origin main
 

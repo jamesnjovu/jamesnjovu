@@ -15,7 +15,7 @@ jobs:
       - name: Fetch GitLab Contribution Stats
         run: |
           GITLAB_TOKEN="${{ secrets.GITLAB_TOKEN }}"
-          GITLAB_HOST="https://git.probasegroup.com"
+          GITLAB_HOST="gitlab.probasegroup.com"
           GITLAB_USER_ID="james"
 
           # Get total commits across all projects

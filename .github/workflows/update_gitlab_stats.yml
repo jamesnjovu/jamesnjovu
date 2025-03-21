@@ -67,10 +67,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
 
-          git pull --rebase origin main || git reset --hard origin/main  # ✅ Ensures the latest changes are present
+          # Fetch the latest changes to avoid conflicts
+          git fetch
+          git pull origin main --rebase || git reset --hard origin/main  # ✅ Ensures the latest changes are present
 
           git add README.md
           git commit -m "Updated GitLab stats" || echo "No changes to commit"
 
-          git push origin main
+          git push https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main
 

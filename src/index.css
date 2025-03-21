@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --primary-color: #4f46e5;
@@ -22,39 +20,32 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-body.light-mode {
-  background-color: var(--light-bg);
-  color: var(--dark-text);
-}
+@layer components {
+  .section-container {
+    @apply max-w-6xl mx-auto px-4 py-16;
+  }
 
-body.dark-mode {
-  background-color: var(--dark-bg);
-  color: var(--light-text);
-}
+  .section-title {
+    @apply text-3xl font-bold mb-8 inline-block relative pb-2;
+  }
 
+  .section-title::after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 4px;
+    background-color: #4f46e5;
+    bottom: 0;
+    left: 0;
+  }
 
-.section-container {
-  @apply max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8;
-}
-
-.section-title {
-  @apply text-3xl font-bold mb-8 inline-block relative after:content-[""] after:absolute after:w-1/2 after:h-1 after:bg-indigo-600 after:bottom-0 after:left-0 pb-2;
-}
-
-.skill-tag {
-  @apply px-3 py-1 m-1 rounded-full text-sm font-medium;
-}
-
-.light-mode .skill-tag {
-  @apply bg-indigo-100 text-indigo-800;
-}
-
-.dark-mode .skill-tag {
-  @apply bg-indigo-900 text-indigo-100;
+  .skill-tag {
+    @apply px-3 py-1 m-1 rounded-full text-sm font-medium;
+  }
 }
 
 /* Add custom animations */
- @keyframes fadeIn {
+@keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }

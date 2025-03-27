@@ -19,14 +19,14 @@ const Projects = () => {
       }
     },
     {
-      title: 'Admin Portal Database',
+      title: 'E-tolling System',
       description: 'Designed and implemented a relational database schema for an admin portal with 20+ tables, including foreign keys and relationships.',
       image: 'https://via.placeholder.com/600x400',
       technologies: ['SQL', 'Database Design', 'Entity Relationships'],
       category: 'backend',
       links: {
-        github: 'https://github.com/',
-        live: '#'
+        github: null,
+        live: 'https://etoll.nrfa.org.zm/home'
       }
     },
     {

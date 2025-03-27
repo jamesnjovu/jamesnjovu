@@ -37,7 +37,8 @@ const Skills = () => {
     ],
     languages: [
       { name: 'English', level: 95, description: 'Fluent' },
-      { name: 'Nyanja', level: 90, description: 'Fluent' }
+      { name: 'Nyanja', level: 90, description: 'Fluent' },
+      { name: 'Bemba', level: 75, description: 'Fluent' },
     ]
   };
 

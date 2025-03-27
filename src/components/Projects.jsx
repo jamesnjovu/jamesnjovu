@@ -1,19 +1,21 @@
 import { useState } from 'react';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import NumberF from '../assets/images/projects/numberF.png'
+import UssdEmulator from '../assets/images/projects/ussdEmulator.png'
 
 const Projects = () => {
   const [filter, setFilter] = useState('all');
   
   const projects = [
     {
-      title: 'E-Banking Mobile Application',
-      description: 'A mobile banking application that allows users to manage their accounts, make transfers, and pay bills.',
-      image: 'https://via.placeholder.com/600x400',
-      technologies: ['Java', 'XML', 'PHP', 'MySQL'],
-      category: 'mobile',
+      title: 'USSD Emulator',
+      description: 'The USSD Emulator is a React-based web application that allows developers to test and simulate USSD session flows by interacting with a backend API. It provides an interface for entering USSD codes, receiving responses, and navigating through menu options as users would on a mobile device.',
+      image: UssdEmulator,
+      technologies: ['React', 'JavaScript', 'Vite'],
+      category: 'frontend',
       links: {
-        github: 'https://github.com/',
-        live: '#'
+        github: 'https://github.com/jamesnjovu/ussd-emulator',
+        live: 'https://jamesnjovu.github.io/ussd-emulator/'
       }
     },
     {
@@ -28,14 +30,14 @@ const Projects = () => {
       }
     },
     {
-      title: 'MNO Integration Library',
-      description: 'Built a dependency in Elixir to integrate with Mobile Network Operators seamlessly, helping developers write less code and increasing delivery speed.',
-      image: 'https://via.placeholder.com/600x400',
-      technologies: ['Elixir', 'API', 'Telecom'],
+      title: 'Elixir Number Functions Library',
+      description: 'Built a dependency in Elixir to help with simple numeric functions, e.g number to words, currency format display, etc.',
+      image: NumberF,
+      technologies: ['Elixir', 'Mathematics'],
       category: 'library',
       links: {
-        github: 'https://github.com/',
-        live: '#'
+        github: 'https://github.com/jamesnjovu/elixir_number_functions',
+        live: 'https://hexdocs.pm/number_f'
       }
     },
     {
@@ -59,7 +61,6 @@ const Projects = () => {
     { value: 'all', label: 'All Projects' },
     { value: 'frontend', label: 'Frontend' },
     { value: 'backend', label: 'Backend' },
-    { value: 'mobile', label: 'Mobile' },
     { value: 'library', label: 'Libraries' }
   ];
 
@@ -108,14 +109,22 @@ const Projects = () => {
               </div>
               
               <div className="flex justify-between mt-4">
-                <a
-                  href={project.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1"
-                >
-                  <FaGithub /> Code
-                </a>
+                {project.links.github && (
+                  <a
+                    href={project.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1"
+                    >
+                    <FaGithub /> Code
+                  </a>
+                )}
+                {!project.links.github && (
+                  <div
+                    className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 flex items-center gap-1"
+                    >
+                  </div>
+                )}
                 <a
                   href={project.links.live}
                   target="_blank"

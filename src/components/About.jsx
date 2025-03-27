@@ -42,7 +42,7 @@ const About = () => {
             Full Stack Software Engineer
           </h2>
           <p className="text-gray-700 dark:text-gray-300 mb-8 text-lg leading-relaxed animate-staggered animate-staggered-delay-2 max-w-xl">
-            Results-driven Software Engineer with over 4 years of professional experience building reusable UI components and designing scalable back-end architectures. Passionate about clean code, performance optimization, and building user-friendly interfaces. Experienced in mentoring junior developers with a strong interest in AI/ML and cloud technologies.
+            Results-driven Software Engineer with over {currentYear - 2020}+ years of professional experience building reusable UI components and designing scalable back-end architectures. Passionate about clean code, performance optimization, and building user-friendly interfaces. Experienced in mentoring junior developers with a strong interest in AI/ML and cloud technologies.
           </p>
           <div className="flex flex-wrap gap-4 animate-staggered animate-staggered-delay-3">
             <a

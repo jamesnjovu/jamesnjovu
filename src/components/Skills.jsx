@@ -8,7 +8,7 @@ const Skills = () => {
   // Enhanced skill data with proficiency levels
   const skills = {
     technical: [
-      { name: 'Elixir', level: 90 },
+      { name: 'Elixir', level: 95 },
       { name: 'JavaScript ES6', level: 85 },
       { name: 'SQL', level: 80 },
       { name: 'HTML5', level: 90 },
@@ -22,10 +22,8 @@ const Skills = () => {
       { name: 'Postgres', level: 80 },
       { name: 'Oracle', level: 70 },
       { name: 'RESTful API', level: 90 },
-      { name: 'C++', level: 65 },
       { name: 'PHP', level: 75 },
       { name: 'MySQL', level: 85 },
-      { name: 'C#', level: 60 }
     ],
     soft: [
       { name: 'Leadership', level: 85 },

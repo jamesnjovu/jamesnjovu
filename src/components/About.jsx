@@ -1,4 +1,5 @@
 import { FaDownload } from 'react-icons/fa';
+import Profile from '../assets/james-profile.jpg';
 
 const About = () => {
   return (
@@ -22,7 +23,7 @@ const About = () => {
               Contact Me
             </a>
             <a
-              href="/resume.pdf"
+              href="/jamesnjovu/resume.pdf"
               className="bg-transparent border-2 border-indigo-600 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-600 hover:text-white dark:hover:text-white font-medium py-3 px-6 rounded-md flex items-center gap-2 transition-colors"
               download
             >
@@ -34,7 +35,7 @@ const About = () => {
         <div className="order-1 md:order-2 flex justify-center">
           <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-indigo-600">
             <img
-              src="/james-profile.jpg" 
+              src={Profile} 
               alt="James Njovu"
               className="w-full h-full object-cover"
             />

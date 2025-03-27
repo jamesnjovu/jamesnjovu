@@ -1,13 +1,4 @@
-@import "tailwindcss";
-
-:root {
-  --primary-color: #4f46e5;
-  --secondary-color: #2563eb;
-  --dark-bg: #111827;
-  --light-bg: #f3f4f6;
-  --dark-text: #1f2937;
-  --light-text: #f9fafb;
-}
+@import "./global.css";
 
 html {
   scroll-behavior: smooth;
@@ -19,6 +10,8 @@ body {
   padding: 0;
   transition: background-color 0.3s, color 0.3s;
 }
+
+
 
 @layer components {
   .section-container {
@@ -40,7 +33,7 @@ body {
   }
 
   .skill-tag {
-    @apply px-3 py-1 m-1 rounded-full text-sm font-medium;
+    @apply px-3 py-1 m-1 rounded-full text-sm font-medium bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200;
   }
 }
 

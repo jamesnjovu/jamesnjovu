@@ -56,13 +56,13 @@ const Header = () => {
 
                     {/* Social Icons */}
                     <div className="hidden md:flex items-center space-x-4">
-                        <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <a href="https://github.com/jamesnjovu" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
                             <FaGithub size={22} />
                         </a>
-                        <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+                        <a href="https://www.linkedin.com/in/james-njovu-0a71181b2/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
                             <FaLinkedin size={22} />
                         </a>
-                        <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                        <a href="/jamesnjovu/resume.pdf" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
                             Resume
                         </a>
                     </div>
@@ -96,13 +96,13 @@ const Header = () => {
                             </ScrollLink>
                         ))}
                         <div className="flex items-center space-x-4 pt-2">
-                            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+                            <a href="https://github.com/jamesnjovu" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
                                 <FaGithub size={22} />
                             </a>
-                            <a href="https://linkedin.com/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
+                            <a href="https://www.linkedin.com/in/james-njovu-0a71181b2/" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400">
                                 <FaLinkedin size={22} />
                             </a>
-                            <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
+                            <a href="/jamesnjovu/resume.pdf" target="_blank" rel="noopener noreferrer" className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition-colors">
                                 Resume
                             </a>
                         </div>

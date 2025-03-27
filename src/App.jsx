@@ -22,6 +22,8 @@ function App() {
     // Otherwise, use system preference as default
     return 'system';
   });
+  
+  const [isLoading, setIsLoading] = useState(true);
 
   // Effect to apply the theme based on user preference
   useEffect(() => {
@@ -54,6 +56,16 @@ function App() {
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
   }, [theme]);
+  
+  // Simulate loading animation
+  useEffect(() => {
+    // Simulate loading time (reduce in production)
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   // Toggle through themes: light -> dark -> system -> light
   const toggleTheme = () => {
@@ -63,6 +75,25 @@ function App() {
       return 'light';
     });
   };
+  
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-dark-bg-primary z-50">
+        <div className="text-center">
+          <div className="relative h-24 w-24 mx-auto mb-8">
+            <div className="absolute inset-0 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin"></div>
+          </div>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent animate-pulse">
+            James Njovu
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-2 animate-pulse">
+            Software Engineer
+          </p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <div className="App">
@@ -81,4 +112,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

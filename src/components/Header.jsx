@@ -85,7 +85,7 @@ const Header = () => {
                         className="cursor-pointer"
                     >
                         <h1 className="text-2xl font-bold relative group">
-                            <span className="bg-gradient-cta bg-clip-text text-transparent">James Njovu</span>
+                            <span className="bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">James Njovu</span>
                             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-cta transition-all duration-300 group-hover:w-full"></span>
                         </h1>
                     </ScrollLink>

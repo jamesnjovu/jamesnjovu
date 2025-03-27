@@ -13,36 +13,46 @@ function App() {
   const [theme, setTheme] = useState(() => {
     // Check local storage first
     const savedTheme = localStorage.getItem('theme');
-    
+
     // If a theme is saved in localStorage, use it
     if (savedTheme) {
       return savedTheme;
     }
-    
+
     // Otherwise, use system preference as default
     return 'system';
   });
-  
+
   const [isLoading, setIsLoading] = useState(true);
 
   // Effect to apply the theme based on user preference
   useEffect(() => {
-    // Function to apply the theme to the document body
+    // Function to apply the theme to the document
     const applyTheme = () => {
+      // First, remove both classes to start fresh
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark-mode', 'light-mode');
+
       if (theme === 'dark') {
-        document.body.className = 'dark-mode';
+        document.documentElement.classList.add('dark'); // This is for Tailwind
+        document.body.classList.add('dark-mode'); // This is for your custom CSS
       } else if (theme === 'light') {
-        document.body.className = 'light-mode';
+        document.body.classList.add('light-mode'); // For custom CSS, Tailwind uses the absence of 'dark'
       } else if (theme === 'system') {
         // Use system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.body.className = prefersDark ? 'dark-mode' : 'light-mode';
+        if (prefersDark) {
+          document.documentElement.classList.add('dark'); // This is for Tailwind
+          document.body.classList.add('dark-mode'); // This is for your custom CSS
+        } else {
+          document.body.classList.add('light-mode'); // For custom CSS
+        }
       }
     };
 
     // Apply theme immediately
     applyTheme();
-    
+
     // Save to localStorage
     localStorage.setItem('theme', theme);
 
@@ -51,19 +61,19 @@ function App() {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = () => applyTheme();
       mediaQuery.addEventListener('change', handleChange);
-      
+
       // Cleanup listener
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
   }, [theme]);
-  
+
   // Simulate loading animation
   useEffect(() => {
     // Simulate loading time (reduce in production)
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
-    
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -75,7 +85,7 @@ function App() {
       return 'light';
     });
   };
-  
+
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-white dark:bg-dark-bg-primary z-50">
@@ -84,7 +94,7 @@ function App() {
             <div className="absolute inset-0 border-4 border-gray-200 dark:border-gray-700 rounded-full"></div>
             <div className="absolute inset-0 border-4 border-t-primary-600 dark:border-t-primary-400 rounded-full animate-spin"></div>
           </div>
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent animate-pulse">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent animate-pulse">
             James Njovu
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mt-2 animate-pulse">
@@ -94,7 +104,7 @@ function App() {
       </div>
     );
   }
-  
+
   return (
     <div className="App">
       <ThemeToggle theme={theme} toggleTheme={toggleTheme} />

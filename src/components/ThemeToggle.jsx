@@ -1,5 +1,5 @@
 import { FaSun, FaMoon, FaDesktop } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const ThemeToggle = ({ theme, toggleTheme }) => {
   const [isAnimating, setIsAnimating] = useState(false);

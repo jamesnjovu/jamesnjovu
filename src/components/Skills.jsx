@@ -67,9 +67,9 @@ const Skills = () => {
 
   // Group technical skills by category for better organization
   const technicalCategories = {
-    'Frontend': ['HTML5', 'CSS3', 'JavaScript ES6', 'ReactJS'],
-    'Backend': ['Elixir', 'Phoenix', 'Node.js', 'PHP', 'JAVA', 'C#', 'C++'],
-    'Database': ['SQL', 'MySQL', 'Postgres', 'MsSQL', 'Oracle'],
+    'Frontend': ['HTML5', 'CSS3', 'JavaScript ES6', 'ReactJS', 'Phoenix Live View'],
+    'Backend': ['Elixir', 'Node.js', 'PHP', 'JAVA'],
+    'Database': ['SQL', 'MySQL', 'PostgresSQL', 'MsSQL', 'Oracle'],
     'DevOps & Tools': ['Docker', 'RESTful API']
   };
 

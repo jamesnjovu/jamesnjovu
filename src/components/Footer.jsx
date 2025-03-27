@@ -79,7 +79,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Info column */}
           <div className="animate-staggered">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">James Njovu</h2>
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">James Njovu</h2>
             <p className="text-gray-600 dark:text-gray-400 mt-3 max-w-sm">
               Full Stack Software Engineer with a passion for building elegant, user-friendly solutions to complex problems.
             </p>

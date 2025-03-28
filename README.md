@@ -62,4 +62,4 @@
 <a href="mailto:njovujames@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-njovujames?style=flat-square&logo=gmail"></a>
 </p>
 
-⭐️ From [jamesnjovu](https://github.com/jamesnjovu)
+⭐️ From [jamesnjovu](https://jamesnjovu.github.io/jamesnjovu/)

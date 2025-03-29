@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { FaGithub, FaExternalLinkAlt, FaCode, FaSearch } from 'react-icons/fa';
 import NumberF from '../assets/images/projects/numberF.png';
 import UssdEmulator from '../assets/images/projects/ussdEmulator.png';
+import PineUi from '../assets/images/projects/pineUi.png';
 
 const Projects = () => {
   const [filter, setFilter] = useState('all');
@@ -12,14 +13,14 @@ const Projects = () => {
   // Enhanced project data
   const projects = [
     {
-      title: 'RESTful API for Mobile App',
-      description: 'Developed a robust RESTful API with comprehensive documentation to support a high-traffic mobile application. Implemented caching strategies and optimized database queries to handle thousands of concurrent requests.',
-      image: 'https://via.placeholder.com/600x400',
-      technologies: ['API Design', 'REST', 'Node.js', 'Express', 'MongoDB'],
-      category: 'backend',
+      title: 'Pine UI',
+      description: 'A comprehensive library of interactive UI components for Phoenix applications built with AlpineJS and TailwindCSS. Features 15+ components including animated text, interactive cards, form elements, buttons with loading states, tooltips, and badges.',
+      image: PineUi,
+      technologies: ['Elixir', 'Phoenix', 'TailwindCSS', 'AlpineJS', 'HEEx'],
+      category: 'library',
       links: {
-        github: 'https://github.com/',
-        live: '#'
+        github: 'https://github.com/jamesnjovu/pine_ui_phoenix',
+        live: 'https://hex.pm/packages/pine_ui_phoenix'
       }
     },
     {

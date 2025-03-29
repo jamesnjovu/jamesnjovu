@@ -1,65 +1,71 @@
+<div align="center">
+  <img src="https://media.licdn.com/dms/image/C5603AQGkuDX4qZxOyg/profile-displayphoto-shrink_100_100/0/1647022729085?e=1692835200&amp;v=beta&amp;t=cormnEvwRGPTC3Y_8PTb9gDyWcqF9BVwSZz5j8oXbwU" width="100px" alt="James Njovu"/>
+  
+  # James Njovu
+  ## Full Stack Software Engineer
 
-<img src="https://media.licdn.com/dms/image/C5603AQGkuDX4qZxOyg/profile-displayphoto-shrink_100_100/0/1647022729085?e=1692835200&amp;v=beta&amp;t=cormnEvwRGPTC3Y_8PTb9gDyWcqF9BVwSZz5j8oXbwU" class="" alt="James">
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-James%20Njovu-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/james-njovu-0a71181b2)
+  [![Email](https://img.shields.io/badge/Email-njovujames@gmail.com-D14836?style=for-the-badge&logo=gmail)](mailto:njovujames@gmail.com)
+  [![Instagram](https://img.shields.io/badge/Instagram-jameslewiswayne-E4405F?style=for-the-badge&logo=instagram)](https://www.instagram.com/jameslewiswayne/)
+</div>
 
-<h2> Hey there! I'm James</h2>
+## 👨🏻‍💻 About Me
 
-<h3> 👨🏻‍💻 &nbsp;About Me </h3>
+Senior Software Developer with a passion for building robust, scalable applications and exploring cutting-edge technologies. Currently specializing in full-stack development with a focus on Elixir and Phoenix LiveView.
 
-- 🤔 &nbsp; Exploring new technologies and developing software solutions and quick hacks.
-- 🎓 &nbsp; Studying Information System at University of Lusaka.
-- 💼 &nbsp; Working as a Senior Software Developer at Probase Limited.
-- 🌱 &nbsp; Learning more about Systems Design and Artificial Intelligence.
+- 🔭 Currently working as a **Senior Software Developer at Probase Limited**
+- 🎓 Studying **Information Systems** at the University of Lusaka
+- 🌱 Expanding knowledge in **Systems Design** and **Artificial Intelligence**
+- 💡 Enjoys developing innovative software solutions and exploring new technologies
 
-<h3> 🛠 &nbsp;Tech Stack</h3>
+## 🛠️ Tech Stack
 
-- 💻 &nbsp;
-  ![Elixir](https://img.shields.io/badge/-Elixir-333333?style=flat&logo=elixir)
-  ![Python 3](https://img.shields.io/badge/-Python-333333?style=flat&logo=python)
-- 🌐 &nbsp;
-  ![HTML5](https://img.shields.io/badge/-HTML5-333333?style=flat&logo=HTML5)
-  ![CSS3](https://img.shields.io/badge/-CSS3-333333?style=flat&logo=CSS3&logoColor=1572B6)
-  ![JavaScript](https://img.shields.io/badge/-JavaScript-333333?style=flat&logo=javascript)
-  ![Bootstrap](https://img.shields.io/badge/-Bootstrap-333333?style=flat&logo=bootstrap&logoColor=563D7C)
-  ![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-333333?style=flat&logo=tailwindcss)
-  ![Phoenix Liveview](https://img.shields.io/badge/-Phoenix%20Liveview-333333?style=flat&logo=phoenix_framework)
-  ![Node.js](https://img.shields.io/badge/-Node.js-333333?style=flat&logo=node.js)
-  ![React](https://img.shields.io/badge/-React-333333?style=flat&logo=react)
-- 🛢 &nbsp;
-  ![MySQL](https://img.shields.io/badge/-MySQL-333333?style=flat&logo=mysql)
-  ![PostgresSQL](https://img.shields.io/badge/-PostgresSQL-333333?style=flat&logo=postgresql)
-  ![MSSQL](https://img.shields.io/badge/-MSSQL-333333?style=flat&logo=mssql)
-  ![Oracle](https://img.shields.io/badge/-Oracle-333333?style=flat&logo=oracle)
-- ⚙️ &nbsp;
-  ![Git](https://img.shields.io/badge/-Git-333333?style=flat&logo=git)
-  ![GitHub](https://img.shields.io/badge/-GitHub-333333?style=flat&logo=github)
-- 🔧 &nbsp;
-  ![Visual Studio Code](https://img.shields.io/badge/-Visual%20Studio%20Code-333333?style=flat&logo=visual-studio-code&logoColor=007ACC)
-  ![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ%20IDEA-333333?style=flat&logo=intellij)
-- 🖥 &nbsp;
-  ![Photoshop](https://img.shields.io/badge/-Photoshop-333333?style=flat&logo=adobe-photoshop)
+### Languages
+![Elixir](https://img.shields.io/badge/-Elixir-4B275F?style=flat-square&logo=elixir)
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 
-<br/>
+### Frontend
+![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/-CSS3-1572B6?style=flat-square&logo=css3)
+![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![Bootstrap](https://img.shields.io/badge/-Bootstrap-7952B3?style=flat-square&logo=bootstrap&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/-Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
 
-<!-- START GITLAB STATS -->
-<!-- GitLab stats will be inserted here -->
-<!-- END GITLAB STATS -->
+### Backend
+![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
+![Phoenix LiveView](https://img.shields.io/badge/-Phoenix_LiveView-FD4F00?style=flat-square&logo=phoenix&logoColor=white)
 
-<br>
+### Databases
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)
+![MySQL](https://img.shields.io/badge/-MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![MS SQL](https://img.shields.io/badge/-MS_SQL-CC2927?style=flat-square&logo=microsoft-sql-server&logoColor=white)
+![Oracle](https://img.shields.io/badge/-Oracle-F80000?style=flat-square&logo=oracle&logoColor=white)
 
-<a href="https://github.com/jamesnjovu">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=jamesnjovu&theme=buefy&show_icons=true" />
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=jamesnjovu&theme=buefy&layout=compact" />
-</a>
+### Tools & Technologies
+![Git](https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github)
+![VS Code](https://img.shields.io/badge/-VS_Code-007ACC?style=flat-square&logo=visual-studio-code)
+![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ_IDEA-000000?style=flat-square&logo=intellij-idea)
+![Photoshop](https://img.shields.io/badge/-Photoshop-31A8FF?style=flat-square&logo=adobe-photoshop&logoColor=white)
 
-<br/>
+## 📊 GitHub Stats
 
-<h3> 🤝🏻 &nbsp;Connect with Me </h3>
+<div align="center">
+  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=jamesnjovu&theme=tokyonight&show_icons=true" />
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=jamesnjovu&theme=tokyonight&layout=compact" />
+</div>
+<!--
+## 🚀 Featured Projects
 
-<p align="center">
-<a href="https://github.com/jamesnjovu"><img alt="Website" src="https://img.shields.io/badge/WEB-james_njovu?style=flat-square&logo=google-chrome"></a>
-<a href="https://www.linkedin.com/in/james-njovu-0a71181b2"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-James%20Njovu?style=flat-square&logo=linkedin"></a>
-<a href="https://www.instagram.com/jameslewiswayne/"><img alt="Instagram" src="https://img.shields.io/badge/Instagram-James%20Njovu?style=flat-square&logo=instagram"></a>
-<a href="mailto:njovujames@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-njovujames?style=flat-square&logo=gmail"></a>
-</p>
+- **[Project Name]** - Brief description of the project and technologies used
+- **[Project Name]** - Brief description of the project and technologies used
+- **[Project Name]** - Brief description of the project and technologies used
+-->
 
+<<<<<<< HEAD
 ⭐️ From [jamesnjovu](https://jamesnjovu.github.io/jamesnjovu/)
+=======
+
+⭐️ From [jamesnjovu](https://github.com/jamesnjovu)
+>>>>>>> e506aec (Update README and Projects component to include Pine UI project and enhance personal description)

@@ -30,7 +30,7 @@ const Projects = () => {
       "technologies": ["Elixir", "API Integration", "Payment Processing", "Fintech", "Open Source", "Json"],
       "category": "library",
       "links": {
-        "github": "https://github.com/james-njovu/ex_mpesa",
+        "github": "https://github.com/jamesnjovu/ex_mpesa",
         "live": "https://hex.pm/packages/elixir_mpesa"
       }
     },

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaCode, FaSearch } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
 import NumberF from '../assets/images/projects/numberF.png';
 import UssdEmulator from '../assets/images/projects/ussdEmulator.png';
+import ExMpesa from '../assets/images/projects/exMpesa.png';
 import PineUi from '../assets/images/projects/pineUi.png';
 
 const Projects = () => {
@@ -22,16 +23,15 @@ const Projects = () => {
         github: 'https://github.com/jamesnjovu/pine_ui_phoenix',
         live: 'https://hex.pm/packages/pine_ui_phoenix'
       }
-    },
-    {
-      title: 'E-Banking Mobile Application',
-      description: 'Built a secure mobile banking solution with features including account management, transfers, bill payments, and transaction history. Implemented biometric authentication and end-to-end encryption.',
-      image: 'https://via.placeholder.com/600x400',
-      technologies: ['Java', 'XML', 'PHP', 'MySQL', 'Security', 'Mobile'],
-      category: 'fullstack',
-      links: {
-        github: 'https://github.com/',
-        live: '#'
+    },{
+      "title": "Elixir Mpesa",
+      "description": "An Elixir library for integrating with the Vodacom M-Pesa OpenAPI. This package provides a simple and elegant way to integrate M-Pesa payment services into your Elixir applications, featuring session management, C2B/B2C/B2B payments, transaction status queries, and direct debit operations.",
+      "image": ExMpesa,
+      "technologies": ["Elixir", "API Integration", "Payment Processing", "Fintech", "Open Source", "Json"],
+      "category": "library",
+      "links": {
+        "github": "https://github.com/james-njovu/ex_mpesa",
+        "live": "https://hex.pm/packages/elixir_mpesa"
       }
     },
     {
@@ -42,7 +42,7 @@ const Projects = () => {
       category: 'library',
       links: {
         github: 'https://github.com/jamesnjovu/elixir_number_functions',
-        live: 'https://hexdocs.pm/number_f'
+        live: 'https://hex.pm/packages/number_f'
       }
     },
     {

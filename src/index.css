@@ -3,24 +3,24 @@
 @tailwind utilities;
 
 :root {
-    --primary-color: #4f46e5;
-    --secondary-color: #2563eb;
-    --dark-bg: #111827;
-    --light-bg: #f3f4f6;
-    --dark-text: #1f2937;
-    --light-text: #f9fafb;
+  --primary-color: #4f46e5;
+  --secondary-color: #2563eb;
+  --dark-bg: #111827;
+  --light-bg: #f3f4f6;
+  --dark-text: #1f2937;
+  --light-text: #f9fafb;
 }
 
 /* Dark mode */
 body.dark-mode {
-    background-color: var(--dark-bg);
-    color: var(--light-text);
+  background-color: var(--dark-bg);
+  color: var(--light-text);
 }
 
 /* Light mode - default */
 body.light-mode {
-    background-color: var(--light-bg);
-    color: var(--dark-text);
+  background-color: var(--light-bg);
+  color: var(--dark-text);
 }
 
 /* animations.css - Import this in your index.css */
@@ -31,6 +31,7 @@ body.light-mode {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -43,6 +44,7 @@ body.light-mode {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -55,10 +57,12 @@ body.light-mode {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
   }
+
   70% {
     transform: scale(1.02);
     box-shadow: 0 0 0 10px rgba(79, 70, 229, 0);
   }
+
   100% {
     transform: scale(1);
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
@@ -70,9 +74,11 @@ body.light-mode {
   0% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
+
   100% {
     background-position: 0% 50%;
   }
@@ -83,6 +89,7 @@ body.light-mode {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -93,6 +100,7 @@ body.light-mode {
   from {
     transform: scale(1);
   }
+
   to {
     transform: scale(1.03);
   }
@@ -161,16 +169,45 @@ body.light-mode {
 }
 
 /* Apply staggered animations to children */
-.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
-.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
-.stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
-.stagger-children > *:nth-child(7) { animation-delay: 0.7s; }
-.stagger-children > *:nth-child(8) { animation-delay: 0.8s; }
-.stagger-children > *:nth-child(9) { animation-delay: 0.9s; }
-.stagger-children > *:nth-child(10) { animation-delay: 1s; }
+.stagger-children>*:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stagger-children>*:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stagger-children>*:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stagger-children>*:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+.stagger-children>*:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+.stagger-children>*:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+.stagger-children>*:nth-child(7) {
+  animation-delay: 0.7s;
+}
+
+.stagger-children>*:nth-child(8) {
+  animation-delay: 0.8s;
+}
+
+.stagger-children>*:nth-child(9) {
+  animation-delay: 0.9s;
+}
+
+.stagger-children>*:nth-child(10) {
+  animation-delay: 1s;
+}
 
 /* Button hover effects */
 .btn-animated {
@@ -185,12 +222,10 @@ body.light-mode {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent);
   transition: all 0.6s;
 }
 
@@ -200,10 +235,10 @@ body.light-mode {
 
 /* Shimmer effect for loading states */
 .shimmer {
-  background: linear-gradient(90deg, 
-    rgba(255, 255, 255, 0) 0%, 
-    rgba(255, 255, 255, 0.2) 50%, 
-    rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -212,6 +247,7 @@ body.light-mode {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -243,9 +279,11 @@ body.light-mode {
   0% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-10px);
   }
+
   100% {
     transform: translateY(0px);
   }
@@ -257,9 +295,12 @@ body.light-mode {
 
 /* Bounce effect */
 @keyframes bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -765,7 +806,8 @@ body {
 }
 
 /* Prevent horizontal overflow */
-html, body {
+html,
+body {
   overflow-x: hidden;
   width: 100%;
   position: relative;
@@ -798,4 +840,129 @@ html, body {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+}
+
+.custom-cursor {
+  cursor: none !important;
+}
+
+/* Make sure links and buttons still indicate they're interactive */
+.custom-cursor a,
+.custom-cursor button,
+.custom-cursor input,
+.custom-cursor textarea,
+.custom-cursor select,
+.custom-cursor [role="button"],
+.custom-cursor .cursor-pointer {
+  cursor: none !important;
+}
+
+/* Media query to disable custom cursor on mobile devices */
+@media (max-width: 767px) {
+  .custom-cursor {
+    cursor: auto !important;
+  }
+
+  .custom-cursor a,
+  .custom-cursor button,
+  .custom-cursor input,
+  .custom-cursor textarea,
+  .custom-cursor select,
+  .custom-cursor [role="button"],
+  .custom-cursor .cursor-pointer {
+    cursor: pointer !important;
+  }
+}
+
+/* Add smooth transitions for cursor elements */
+.cursor-element {
+  transition: width 0.2s, height 0.2s, background-color 0.3s, mix-blend-mode 0.3s, opacity 0.3s, transform 0.1s;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, width, height, opacity;
+}
+
+/* Special interactive element effects */
+.cursor-interactive {
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s;
+}
+
+.cursor-interactive:hover {
+  transform: scale(1.05);
+}
+
+body.custom-cursor {
+  cursor: none !important;
+}
+
+body.custom-cursor a,
+body.custom-cursor button,
+body.custom-cursor input[type="submit"],
+body.custom-cursor label[for],
+body.custom-cursor select,
+body.custom-cursor [role="button"],
+body.custom-cursor .cursor-pointer {
+  cursor: none !important;
+}
+
+/* Add this to force cursor hiding on all elements */
+body.custom-cursor {
+  cursor: none !important;
+}
+
+body.custom-cursor a,
+body.custom-cursor button,
+body.custom-cursor input[type="submit"],
+body.custom-cursor label[for],
+body.custom-cursor select,
+body.custom-cursor [role="button"],
+body.custom-cursor .cursor-pointer {
+  cursor: none !important;
+}
+
+/* Handle text selection - show default cursor for better control */
+body.custom-cursor ::selection {
+  background-color: rgba(79, 70, 229, 0.3);
+  color: currentColor;
+}
+
+/* Force hardware acceleration for smoother cursor movement */
+.hardware-accelerated {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
+}
+
+/* Only apply custom cursor on non-touch devices */
+@media (hover: none) {
+  body.custom-cursor {
+    cursor: auto !important;
+  }
+  
+  body.custom-cursor a, 
+  body.custom-cursor button, 
+  body.custom-cursor input,
+  body.custom-cursor textarea,
+  body.custom-cursor select,
+  body.custom-cursor [role="button"],
+  body.custom-cursor .cursor-pointer {
+    cursor: pointer !important;
+  }
+}
+
+/* Animate cursor transitions */
+.cursor-animate {
+  transition: width 0.2s, height 0.2s, background-color 0.3s, mix-blend-mode 0.3s, 
+              opacity 0.3s, transform 0.1s, border-radius 0.3s !important;
 }

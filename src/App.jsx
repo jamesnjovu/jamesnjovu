@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import About from './components/About';
@@ -7,7 +8,7 @@ import Education from './components/Education';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-// Remove ThemeToggle import as we're moving that functionality to Footer
+import MouseTracker from './components/MouseTracker';
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -77,7 +78,21 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Toggle through themes functionality has been moved to Footer component
+  // Hide default cursor if using custom cursor
+  useEffect(() => {
+    // Only hide cursor on non-touch devices and screens larger than mobile
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isMobile = window.innerWidth < 768;
+    
+    if (!isTouchDevice && !isMobile) {
+      // Add custom cursor style
+      document.body.classList.add('custom-cursor');
+    }
+    
+    return () => {
+      document.body.classList.remove('custom-cursor');
+    };
+  }, []);
 
   if (isLoading) {
     return (
@@ -100,7 +115,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* ThemeToggle component removed - functionality moved to Footer */}
+      <MouseTracker />
       <Header />
       <main>
         <About />

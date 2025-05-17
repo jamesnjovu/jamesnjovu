@@ -1,10 +1,21 @@
 import { useState, useEffect } from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaHeart, FaArrowUp, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaTwitter, FaHeart, FaArrowUp, FaEnvelope, FaPhoneAlt, FaSun, FaMoon, FaDesktop } from 'react-icons/fa';
 import { Link as ScrollLink } from 'react-scroll';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [theme, setTheme] = useState('system');
+  const [showThemeOptions, setShowThemeOptions] = useState(false);
+  
+  // Initialize theme on mount
+  useEffect(() => {
+    // Get the theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
   
   const menuItems = [
     { label: 'About', to: 'about' },
@@ -54,18 +65,115 @@ const Footer = () => {
     });
   };
 
+  // Toggle theme options
+  const toggleThemeOptions = () => {
+    setShowThemeOptions(!showThemeOptions);
+  };
+
+  // Handle theme change
+  const changeTheme = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Apply the theme
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.body.classList.remove('light-mode');
+      document.body.classList.add('dark-mode');
+    } else if (newTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark-mode');
+      document.body.classList.add('light-mode');
+    } else if (newTheme === 'system') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) {
+        document.documentElement.classList.add('dark');
+        document.body.classList.remove('light-mode');
+        document.body.classList.add('dark-mode');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.body.classList.remove('dark-mode');
+        document.body.classList.add('light-mode');
+      }
+    }
+    
+    // Hide the theme options after selection
+    setShowThemeOptions(false);
+  };
+
+  // Get theme icon
+  const getThemeIcon = () => {
+    if (theme === 'light') {
+      return <FaSun className="text-yellow-500" />;
+    } else if (theme === 'dark') {
+      return <FaMoon className="text-indigo-400" />;
+    } else {
+      return <FaDesktop className="text-gray-600 dark:text-gray-300" />;
+    }
+  };
+
   return (
     <footer className="relative bg-gray-100 dark:bg-gray-900 pt-16 pb-8 overflow-hidden">
-      {/* Scroll to top button */}
-      <button 
-        onClick={scrollToTop}
-        className={`fixed right-6 bottom-6 bg-primary-600 dark:bg-primary-500 text-white rounded-full p-3 shadow-lg hover:bg-primary-700 dark:hover:bg-primary-600 transition-all duration-300 z-30 ${
-          showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
-        }`}
-        aria-label="Scroll to top"
-      >
-        <FaArrowUp />
-      </button>
+      {/* Always visible Theme Toggle FAB */}
+      <div className="fixed right-6 bottom-24 z-50 transition-all duration-300">
+        {/* Theme options popup */}
+        {showThemeOptions && (
+          <div className="absolute bottom-12 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 mb-2 flex flex-col space-y-2 animate-fadeIn">
+            <button 
+              onClick={() => changeTheme('light')}
+              className={`p-2 rounded-full flex items-center justify-center ${
+                theme === 'light' ? 'bg-yellow-100 text-yellow-600' : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              aria-label="Switch to Light Mode"
+            >
+              <FaSun />
+            </button>
+            <button 
+              onClick={() => changeTheme('dark')}
+              className={`p-2 rounded-full flex items-center justify-center ${
+                theme === 'dark' ? 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400' : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              aria-label="Switch to Dark Mode"
+            >
+              <FaMoon />
+            </button>
+            <button 
+              onClick={() => changeTheme('system')}
+              className={`p-2 rounded-full flex items-center justify-center ${
+                theme === 'system' ? 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300' : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+              }`}
+              aria-label="Use System Preference"
+            >
+              <FaDesktop />
+            </button>
+          </div>
+        )}
+        
+        {/* Theme toggle button - always visible */}
+        <button 
+          onClick={toggleThemeOptions}
+          className={`bg-white dark:bg-gray-800 text-primary-600 dark:text-primary-400 rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 ${
+            showThemeOptions ? 'ring-2 ring-primary-500' : ''
+          }`}
+          aria-label="Toggle theme options"
+        >
+          {getThemeIcon()}
+        </button>
+      </div>
+      
+      {/* Conditional Scroll to Top FAB */}
+      <div className={`fixed right-6 bottom-6 z-50 transition-all duration-300 ${
+        showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
+      }`}>
+        {/* Scroll to top button */}
+        <button 
+          onClick={scrollToTop}
+          className="bg-primary-600 dark:bg-primary-500 text-white rounded-full p-3 shadow-lg hover:bg-primary-700 dark:hover:bg-primary-600 transition-all duration-300"
+          aria-label="Scroll to top"
+        >
+          <FaArrowUp />
+        </button>
+      </div>
       
       {/* Decorative shapes */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-0 transform -translate-y-1/2">

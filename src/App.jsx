@@ -7,7 +7,7 @@ import Education from './components/Education';
 import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import ThemeToggle from './components/ThemeToggle';
+// Remove ThemeToggle import as we're moving that functionality to Footer
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -77,14 +77,7 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Toggle through themes: light -> dark -> system -> light
-  const toggleTheme = () => {
-    setTheme(prevTheme => {
-      if (prevTheme === 'light') return 'dark';
-      if (prevTheme === 'dark') return 'system';
-      return 'light';
-    });
-  };
+  // Toggle through themes functionality has been moved to Footer component
 
   if (isLoading) {
     return (
@@ -107,7 +100,7 @@ function App() {
 
   return (
     <div className="App">
-      <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+      {/* ThemeToggle component removed - functionality moved to Footer */}
       <Header />
       <main>
         <About />

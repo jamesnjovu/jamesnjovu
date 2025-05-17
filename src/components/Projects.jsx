@@ -1,17 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaSearch } from 'react-icons/fa';
+import { FaGithub, FaExternalLinkAlt, FaSearch, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import NumberF from '../assets/images/projects/numberF.png';
 import UssdEmulator from '../assets/images/projects/ussdEmulator.png';
 import ExMpesa from '../assets/images/projects/exMpesa.png';
 import PineUi from '../assets/images/projects/pineUi.png';
+import ExMtnMomo from '../assets/images/projects/exMtnMomo.png'; // You'll need to add this image
+import ExLiveTable from '../assets/images/projects/exLiveTable.png'; // You'll need to add this image
 
 const Projects = () => {
   const [filter, setFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [visibleProjects, setVisibleProjects] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [paginatedProjects, setPaginatedProjects] = useState([]);
+  const projectsPerPage = 4;
   const sectionRef = useRef(null);
   
-  // Enhanced project data
+  // Enhanced project data with additional libraries
   const projects = [
     {
       title: 'Pine UI',
@@ -23,7 +29,8 @@ const Projects = () => {
         github: 'https://github.com/jamesnjovu/pine_ui_phoenix',
         live: 'https://hex.pm/packages/pine_ui_phoenix'
       }
-    },{
+    },
+    {
       "title": "Elixir Mpesa",
       "description": "An Elixir library for integrating with the Vodacom M-Pesa OpenAPI. This package provides a simple and elegant way to integrate M-Pesa payment services into your Elixir applications, featuring session management, C2B/B2C/B2B payments, transaction status queries, and direct debit operations.",
       "image": ExMpesa,
@@ -32,6 +39,28 @@ const Projects = () => {
       "links": {
         "github": "https://github.com/jamesnjovu/ex_mpesa",
         "live": "https://hex.pm/packages/elixir_mpesa"
+      }
+    },
+    {
+      title: 'MTN MoMo API Client',
+      description: 'A comprehensive Elixir client for MTN Mobile Money API integration, allowing developers to easily implement MTN MoMo payments in their Phoenix/Elixir applications. The library supports collections, disbursements, and remittances with robust error handling and configuration options.',
+      image: ExMtnMomo,
+      technologies: ['Elixir', 'API Client', 'Payment Gateway', 'MTN MoMo', 'Fintech'],
+      category: 'library',
+      links: {
+        github: 'https://github.com/jamesnjovu/ex_mtn_momo',
+        live: 'https://hexdocs.pm/ex_mtn_momo/readme.html'
+      }
+    },
+    {
+      title: 'Live Table for Phoenix LiveView',
+      description: 'A powerful, customizable, and interactive data table component for Phoenix LiveView applications. Features include sortable columns, pagination, search functionality, custom formatting, and responsive design all with minimal configuration.',
+      image: ExLiveTable,
+      technologies: ['Elixir', 'Phoenix LiveView', 'DataTables', 'UI Component', 'HEEx'],
+      category: 'library',
+      links: {
+        github: 'https://github.com/jamesnjovu/ex_live_table',
+        live: 'https://hexdocs.pm/ex_live_table/readme.html'
       }
     },
     {
@@ -71,7 +100,32 @@ const Projects = () => {
     });
     
     setVisibleProjects(filtered);
+    
+    // Calculate total pages for pagination
+    const pages = Math.ceil(filtered.length / projectsPerPage);
+    setTotalPages(pages);
+    
+    // Reset to first page when filters change
+    setCurrentPage(1);
   }, [filter, searchTerm]);
+  
+  // Handle pagination
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * projectsPerPage;
+    const endIndex = startIndex + projectsPerPage;
+    setPaginatedProjects(visibleProjects.slice(startIndex, endIndex));
+  }, [visibleProjects, currentPage]);
+
+  // Handle page navigation
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      // Scroll back to top of projects section when changing page
+      if (sectionRef.current) {
+        sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
 
   // Intersection Observer for animation
   useEffect(() => {
@@ -145,86 +199,136 @@ const Projects = () => {
         
         {/* Projects Grid */}
         {visibleProjects.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 stagger-children">
-            {visibleProjects.map((project, index) => (
-              <div 
-                key={index}
-                className="card project-card hover:shadow-xl"
-              >
-                <div className="relative overflow-hidden h-48">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover project-image"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-                    <div className="p-4 text-white">
-                      <div className="flex gap-4">
-                        {project.links.github && (
-                          <a
-                            href={project.links.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-primary-400 transition-colors hover-rotate"
-                            aria-label="View source code"
-                          >
-                            <FaGithub size={22} />
-                          </a>
-                        )}
-                        {project.links.live && project.links.live !== '#' && (
-                          <a
-                            href={project.links.live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-primary-400 transition-colors hover-rotate"
-                            aria-label="View live demo"
-                          >
-                            <FaExternalLinkAlt size={22} />
-                          </a>
-                        )}
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 stagger-children">
+              {paginatedProjects.map((project, index) => (
+                <div 
+                  key={index}
+                  className="card project-card hover:shadow-xl"
+                >
+                  <div className="relative overflow-hidden h-48">
+                    <img 
+                      src={project.image} 
+                      alt={project.title}
+                      className="w-full h-full object-cover project-image"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
+                      <div className="p-4 text-white">
+                        <div className="flex gap-4">
+                          {project.links.github && (
+                            <a
+                              href={project.links.github}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-primary-400 transition-colors hover-rotate"
+                              aria-label="View source code"
+                            >
+                              <FaGithub size={22} />
+                            </a>
+                          )}
+                          {project.links.live && project.links.live !== '#' && (
+                            <a
+                              href={project.links.live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-primary-400 transition-colors hover-rotate"
+                              aria-label="View live demo"
+                            >
+                              <FaExternalLinkAlt size={22} />
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-2">{project.title}</h3>
-                  <p className="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{project.description}</p>
                   
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.technologies.map((tech, i) => (
-                      <span key={i} className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 rounded-full px-2 py-1">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  
-                  <div className="flex justify-between mt-4">
-                    {project.links.github && (
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-2">{project.title}</h3>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4 line-clamp-3">{project.description}</p>
+                    
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies.map((tech, i) => (
+                        <span key={i} className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 rounded-full px-2 py-1">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    
+                    <div className="flex justify-between mt-4">
+                      {project.links.github && (
+                        <a
+                          href={project.links.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-1 transition-colors group"
+                        >
+                          <FaGithub className="group-hover:animate-bounce" /> Code
+                        </a>
+                      )}
+                      {!project.links.github && <div></div>}
+                      
                       <a
-                        href={project.links.github}
+                        href={project.links.live}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-1 transition-colors group"
                       >
-                        <FaGithub className="group-hover:animate-bounce" /> Code
+                        <FaExternalLinkAlt className="group-hover:animate-bounce" /> Demo
                       </a>
-                    )}
-                    {!project.links.github && <div></div>}
-                    
-                    <a
-                      href={project.links.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 flex items-center gap-1 transition-colors group"
-                    >
-                      <FaExternalLinkAlt className="group-hover:animate-bounce" /> Demo
-                    </a>
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="flex justify-center items-center mt-12 space-x-2">
+                <button 
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`p-2 rounded-full ${
+                    currentPage === 1 
+                      ? 'text-gray-400 cursor-not-allowed' 
+                      : 'text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/20'
+                  }`}
+                  aria-label="Previous page"
+                >
+                  <FaChevronLeft />
+                </button>
+                
+                {/* Page numbers */}
+                {[...Array(totalPages)].map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => goToPage(index + 1)}
+                    className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${
+                      currentPage === index + 1
+                        ? 'bg-primary-600 text-white'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/20'
+                    }`}
+                    aria-label={`Page ${index + 1}`}
+                    aria-current={currentPage === index + 1 ? 'page' : undefined}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                
+                <button 
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`p-2 rounded-full ${
+                    currentPage === totalPages 
+                      ? 'text-gray-400 cursor-not-allowed' 
+                      : 'text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/20'
+                  }`}
+                  aria-label="Next page"
+                >
+                  <FaChevronRight />
+                </button>
               </div>
-            ))}
-          </div>
+            )}
+          </>
         ) : (
           <div className="text-center py-12">
             <FaSearch className="mx-auto text-4xl text-gray-400 mb-4" />

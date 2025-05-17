@@ -36,7 +36,7 @@ const ThemeToggle = ({ theme, toggleTheme }) => {
   return (
     <button
       onClick={handleToggle}
-      className={`fixed z-50 top-4 right-4 md:top-6 md:right-6 p-3 rounded-full shadow-lg transition-all duration-300 ${
+      className={`fixed z-30 top-4 right-4 md:top-6 md:right-6 p-3 rounded-full shadow-lg transition-all duration-300 ${
         isAnimating ? 'scale-110' : ''
       } ${
         theme === 'light' 

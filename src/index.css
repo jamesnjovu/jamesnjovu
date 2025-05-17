@@ -763,3 +763,39 @@ body {
 .btn-animated:hover:after {
   left: 100%;
 }
+
+/* Prevent horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* Fix for mobile navigation dropdown */
+.mobile-menu-fix {
+  max-width: 100vw;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+/* Fix z-index layers */
+.z-fixed-menu {
+  z-index: 50;
+}
+
+.z-theme-toggle {
+  z-index: 45;
+}
+
+.z-scroll-top {
+  z-index: 45;
+}
+
+/* Ensure proper padding on mobile screens */
+@media (max-width: 768px) {
+  .section-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

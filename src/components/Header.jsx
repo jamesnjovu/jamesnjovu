@@ -55,6 +55,20 @@ const Header = () => {
         return cleanup;
     }, []);
 
+    // Lock body scroll when mobile menu is open to prevent horizontal scrolling
+    useEffect(() => {
+        if (isMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        
+        // Cleanup function to ensure scroll is re-enabled when component unmounts
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isMenuOpen]);
+
     const menuItems = [
         { label: 'About', to: 'about' },
         { label: 'Skills', to: 'skills' },
@@ -155,10 +169,10 @@ const Header = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu - Fixed position and full width to prevent horizontal scrolling */}
             <div 
-                className={`md:hidden bg-white dark:bg-dark-bg-secondary border-t border-gray-200 dark:border-gray-800 absolute w-full left-0 shadow-lg transition-all duration-300 transform ${
-                    isMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-10 opacity-0 pointer-events-none'
+                className={`md:hidden fixed left-0 right-0 bg-white dark:bg-dark-bg-secondary border-t border-gray-200 dark:border-gray-800 shadow-lg transition-all duration-300 z-50 ${
+                    isMenuOpen ? 'top-[60px] opacity-100' : '-top-[500px] opacity-0 pointer-events-none'
                 }`}
             >
                 <div className="max-w-6xl mx-auto px-4 py-4">

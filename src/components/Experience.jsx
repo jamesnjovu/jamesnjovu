@@ -4,6 +4,8 @@ import { FaBriefcase, FaChevronDown, FaChevronUp, FaStar, FaTrophy, FaArrowRight
 const Experience = () => {
   const [expandedItem, setExpandedItem] = useState(0);
   const sectionRef = useRef(null);
+  // Create refs for each experience item
+  const experienceRefs = useRef([]);
   
   const experiences = [
     {
@@ -64,6 +66,27 @@ const Experience = () => {
     }
   ];
 
+  // Initialize refs for each experience item
+  useEffect(() => {
+    experienceRefs.current = experienceRefs.current.slice(0, experiences.length);
+  }, [experiences.length]);
+
+  // Function to handle expanding item and scrolling to it
+  const handleExpandItem = (index) => {
+    setExpandedItem(index);
+    
+    // Scroll to the selected experience with a slight delay to ensure DOM update
+    setTimeout(() => {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile && experienceRefs.current[index]) {
+        experienceRefs.current[index].scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }, 100);
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -95,12 +118,13 @@ const Experience = () => {
           {experiences.map((exp, index) => (
             <div 
               key={index}
+              ref={el => experienceRefs.current[index] = el}
               className={`p-6 rounded-lg transition-all duration-300 cursor-pointer experience-card ${
                 expandedItem === index 
                 ? 'bg-primary-50 dark:bg-primary-900/20 shadow-lg border-l-4 border-primary-600' 
                 : 'bg-white dark:bg-gray-800/50 hover:bg-primary-50 dark:hover:bg-primary-900/10 border-l-4 border-transparent'
               }`}
-              onClick={() => setExpandedItem(index)}
+              onClick={() => handleExpandItem(index)}
             >
               <div className="flex justify-between items-start">
                 <div className="flex gap-4">

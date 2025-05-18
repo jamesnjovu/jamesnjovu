@@ -16,10 +16,10 @@ const Projects = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [paginatedProjects, setPaginatedProjects] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
-  
+
   const sectionRef = useRef(null);
   const projectsGridRef = useRef(null);
-  
+
   // Enhanced project data with additional libraries
   const projects = [
     {
@@ -95,13 +95,13 @@ const Projects = () => {
     const checkIsMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     // Initial check
     checkIsMobile();
-    
+
     // Listen for resize events
     window.addEventListener('resize', checkIsMobile);
-    
+
     return () => {
       window.removeEventListener('resize', checkIsMobile);
     };
@@ -111,37 +111,37 @@ const Projects = () => {
     // Filter and search projects
     const filtered = projects.filter(project => {
       const matchesFilter = filter === 'all' || project.category === filter;
-      const matchesSearch = searchTerm === '' || 
+      const matchesSearch = searchTerm === '' ||
         project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.technologies.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
-      
+
       return matchesFilter && matchesSearch;
     });
-    
+
     setVisibleProjects(filtered);
-    
+
     // Calculate total pages for pagination based on screen size
     const projectsPerPage = isMobile ? 1 : 4;
     const pages = Math.ceil(filtered.length / projectsPerPage);
     setTotalPages(pages);
-    
+
     // Reset to first page when filters change
     setCurrentPage(1);
   }, [filter, searchTerm, isMobile]);
-  
+
   // Handle pagination
   useEffect(() => {
     const projectsPerPage = isMobile ? 1 : 4;
     const startIndex = (currentPage - 1) * projectsPerPage;
     const endIndex = startIndex + projectsPerPage;
     setPaginatedProjects(visibleProjects.slice(startIndex, endIndex));
-    
+
     // Scroll to projects grid when pagination changes (if not the first render)
     if (projectsGridRef.current && currentPage !== 1) {
       setTimeout(() => {
-        projectsGridRef.current.scrollIntoView({ 
-          behavior: 'smooth', 
+        projectsGridRef.current.scrollIntoView({
+          behavior: 'smooth',
           block: 'start',
           inline: 'nearest'
         });
@@ -188,15 +188,15 @@ const Projects = () => {
     { value: 'fullstack', label: 'Full Stack' },
     { value: 'library', label: 'Libraries' }
   ];
-  
+
   // Calculate projects per page based on device
   const projectsPerPage = isMobile ? 1 : 4;
-  
+
   return (
     <section id="projects" className="section-container relative overflow-hidden">
       <div ref={sectionRef} className="opacity-0">
         <h2 className="section-title">My Projects</h2>
-        
+
         {/* Search and Filter Controls */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -210,17 +210,16 @@ const Projects = () => {
               />
               <FaSearch className="absolute left-3 top-3 text-gray-400" />
             </div>
-            
+
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => (
                 <button
                   key={category.value}
                   onClick={() => setFilter(category.value)}
-                  className={`py-2 px-4 rounded-md transition-all duration-300 ${
-                    filter === category.value
+                  className={`py-2 px-4 rounded-md transition-all duration-300 ${filter === category.value
                       ? 'bg-primary-600 text-white shadow-md'
                       : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/30'
-                  }`}
+                    }`}
                 >
                   {category.label}
                 </button>
@@ -228,7 +227,7 @@ const Projects = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Projects Grid - with responsive pagination */}
         {visibleProjects.length > 0 ? (
           <>
@@ -242,16 +241,16 @@ const Projects = () => {
                 {isMobile ? 'Viewing 1 project per page on mobile' : 'Viewing 4 projects per page'}
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 stagger-children">
               {paginatedProjects.map((project, index) => (
-                <div 
+                <div
                   key={index}
                   className="card project-card hover:shadow-xl"
                 >
                   <div className="relative overflow-hidden h-48">
-                    <img 
-                      src={project.image} 
+                    <img
+                      src={project.image}
                       alt={project.title}
                       className="w-full h-full object-cover project-image"
                     />
@@ -284,11 +283,11 @@ const Projects = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="p-6">
                     <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-2">{project.title}</h3>
                     <p className="text-gray-700 dark:text-gray-300 mb-4">{project.description}</p>
-                    
+
                     <div className="flex flex-wrap gap-2 mb-4">
                       {project.technologies.map((tech, i) => (
                         <span key={i} className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-800 dark:text-primary-200 rounded-full px-2 py-1">
@@ -296,7 +295,7 @@ const Projects = () => {
                         </span>
                       ))}
                     </div>
-                    
+
                     <div className="flex justify-between mt-4">
                       {project.links.github && (
                         <a
@@ -309,7 +308,7 @@ const Projects = () => {
                         </a>
                       )}
                       {!project.links.github && <div></div>}
-                      
+
                       <a
                         href={project.links.live}
                         target="_blank"
@@ -323,23 +322,22 @@ const Projects = () => {
                 </div>
               ))}
             </div>
-            
+
             {/* Enhanced Pagination Controls */}
             {totalPages > 1 && (
               <div className="flex justify-center items-center mt-12 space-x-2">
-                <button 
+                <button
                   onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className={`p-2 rounded-full ${
-                    currentPage === 1 
-                      ? 'text-gray-400 cursor-not-allowed' 
+                  className={`p-2 rounded-full ${currentPage === 1
+                      ? 'text-gray-400 cursor-not-allowed'
                       : 'text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/20'
-                  }`}
+                    }`}
                   aria-label="Previous page"
                 >
                   <FaChevronLeft />
                 </button>
-                
+
                 {/* Dynamic Page Numbers - show fewer on mobile */}
                 {isMobile ? (
                   // On mobile, show current page, with ellipsis if needed
@@ -356,7 +354,7 @@ const Projects = () => {
                         {currentPage > 3 && <span className="text-gray-500 dark:text-gray-400">...</span>}
                       </>
                     )}
-                    
+
                     {currentPage > 1 && (
                       <button
                         onClick={() => goToPage(currentPage - 1)}
@@ -366,7 +364,7 @@ const Projects = () => {
                         {currentPage - 1}
                       </button>
                     )}
-                    
+
                     <button
                       className="h-8 w-8 rounded-full flex items-center justify-center transition-all bg-primary-600 text-white"
                       aria-label={`Page ${currentPage}`}
@@ -374,7 +372,7 @@ const Projects = () => {
                     >
                       {currentPage}
                     </button>
-                    
+
                     {currentPage < totalPages && (
                       <button
                         onClick={() => goToPage(currentPage + 1)}
@@ -384,7 +382,7 @@ const Projects = () => {
                         {currentPage + 1}
                       </button>
                     )}
-                    
+
                     {currentPage < totalPages - 1 && (
                       <>
                         {currentPage < totalPages - 2 && <span className="text-gray-500 dark:text-gray-400">...</span>}
@@ -404,11 +402,10 @@ const Projects = () => {
                     <button
                       key={index}
                       onClick={() => goToPage(index + 1)}
-                      className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${
-                        currentPage === index + 1
+                      className={`h-8 w-8 rounded-full flex items-center justify-center transition-all ${currentPage === index + 1
                           ? 'bg-primary-600 text-white'
                           : 'text-gray-600 dark:text-gray-300 hover:bg-primary-100 dark:hover:bg-primary-900/20'
-                      }`}
+                        }`}
                       aria-label={`Page ${index + 1}`}
                       aria-current={currentPage === index + 1 ? 'page' : undefined}
                     >
@@ -416,15 +413,14 @@ const Projects = () => {
                     </button>
                   ))
                 )}
-                
-                <button 
+
+                <button
                   onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className={`p-2 rounded-full ${
-                    currentPage === totalPages 
-                      ? 'text-gray-400 cursor-not-allowed' 
+                  className={`p-2 rounded-full ${currentPage === totalPages
+                      ? 'text-gray-400 cursor-not-allowed'
                       : 'text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/20'
-                  }`}
+                    }`}
                   aria-label="Next page"
                 >
                   <FaChevronRight />
@@ -437,8 +433,8 @@ const Projects = () => {
             <FaSearch className="mx-auto text-4xl text-gray-400 mb-4" />
             <h3 className="text-xl font-medium text-gray-700 dark:text-gray-300">No projects found</h3>
             <p className="text-gray-600 dark:text-gray-400 mt-2">Try adjusting your search or filter criteria</p>
-            <button 
-              onClick={() => {setFilter('all'); setSearchTerm('');}} 
+            <button
+              onClick={() => { setFilter('all'); setSearchTerm(''); }}
               className="mt-4 btn btn-primary"
             >
               Reset Filters
@@ -446,7 +442,7 @@ const Projects = () => {
           </div>
         )}
       </div>
-      
+
       {/* Decorative elements */}
       <div className="absolute -z-10 top-10 -right-20 w-64 h-64 bg-primary-200/20 dark:bg-primary-900/10 rounded-full blur-3xl"></div>
       <div className="absolute -z-10 bottom-10 -left-20 w-64 h-64 bg-accent-200/20 dark:bg-accent-900/10 rounded-full blur-3xl"></div>

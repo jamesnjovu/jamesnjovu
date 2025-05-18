@@ -1,5 +1,6 @@
+
 import { useState, useEffect, useRef } from 'react';
-import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle, FaSpinner } from 'react-icons/fa';
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -8,12 +9,12 @@ const Contact = () => {
     subject: '',
     message: ''
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [submitStatus, setSubmitStatus] = useState('');
   const sectionRef = useRef(null);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -21,32 +22,65 @@ const Contact = () => {
       [name]: value
     });
   };
-  
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('loading');
-    
-    // Simulate backend connection
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitStatus('success');
-      setSubmitMessage('Your message has been sent successfully! I will get back to you soon.');
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
+
+    try {
+      // API call to send email
+      const response = await fetch('http://mailer.sms.probasegroup.com/api/send/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          service: 'html',
+          to: 'njovujames@gmail.com',
+          subject: `Contact Form: ${formData.subject}`,
+          html: `
+            <h1>New Contact Form Submission</h1>
+            <p><strong>Name:</strong> ${formData.name}</p>
+            <p><strong>Email:</strong> ${formData.email}</p>
+            <p><strong>Subject:</strong> ${formData.subject}</p>
+            <p><strong>Message:</strong> ${formData.message}</p>
+          `,
+          sender: formData.name
+        }),
       });
-      
-      // Clear success message after 5 seconds
+
+      const result = await response.json();
+
+      console.log('Response:', result);
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setSubmitMessage('Your message has been sent successfully! I will get back to you soon.');
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        throw new Error(result.message || 'Something went wrong');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setSubmitStatus('error');
+      setSubmitMessage('Failed to send your message. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+
+      // Clear status after 5 seconds
       setTimeout(() => {
         setSubmitMessage('');
         setSubmitStatus('');
       }, 5000);
-    }, 1500);
+    }
   };
-  
+
   const contactInfo = [
     {
       icon: <FaEnvelope className="text-xl" />,
@@ -94,7 +128,7 @@ const Contact = () => {
     <section id="contact" className="section-container relative">
       <div ref={sectionRef} className="opacity-0">
         <h2 className="section-title">Get In Touch</h2>
-        
+
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12 stagger-children">
           <div className="animate-staggered">
             <div className="bg-white dark:bg-dark-bg-secondary p-6 md:p-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
@@ -102,7 +136,7 @@ const Contact = () => {
               <p className="text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
                 I'm interested in freelance opportunities – especially ambitious or large projects. However, if you have other requests or questions, don't hesitate to use the form to get in touch.
               </p>
-              
+
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-center gap-4 group hover-scale">
@@ -111,7 +145,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-800 dark:text-gray-200">{info.label}</h4>
-                      <a 
+                      <a
                         href={info.link}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -123,7 +157,7 @@ const Contact = () => {
                   </div>
                 ))}
               </div>
-              
+
               {/* Social presence */}
               <div className="mt-12">
                 <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">Find me on</h4>
@@ -141,11 +175,11 @@ const Contact = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="animate-staggered animate-staggered-delay-2">
             <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-bg-secondary p-6 md:p-8 rounded-lg shadow-md space-y-5">
               <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Send a Message</h3>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="col-span-1">
                   <label htmlFor="name" className="form-label">
@@ -178,7 +212,7 @@ const Contact = () => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label htmlFor="subject" className="form-label">
                   Subject
@@ -194,7 +228,7 @@ const Contact = () => {
                   className="input"
                 />
               </div>
-              
+
               <div>
                 <label htmlFor="message" className="form-label">
                   Your Message
@@ -210,7 +244,7 @@ const Contact = () => {
                   className="input"
                 ></textarea>
               </div>
-              
+
               <div>
                 <button
                   type="submit"
@@ -227,10 +261,16 @@ const Contact = () => {
                     </span>
                   )}
                 </button>
-                
+
                 {submitStatus === 'success' && (
                   <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-md flex items-center animate-fadeIn">
                     <FaCheckCircle className="mr-2" /> {submitMessage}
+                  </div>
+                )}
+
+                {submitStatus === 'error' && (
+                  <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-md flex items-center animate-fadeIn">
+                    <FaExclamationTriangle className="mr-2" /> {submitMessage}
                   </div>
                 )}
               </div>
@@ -238,7 +278,7 @@ const Contact = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Decorative elements */}
       <div className="absolute -z-10 bottom-10 -right-20 w-80 h-80 bg-primary-200/20 dark:bg-primary-900/10 rounded-full blur-3xl"></div>
     </section>

@@ -30,7 +30,7 @@ const Contact = () => {
 
     try {
       // API call to send email
-      const response = await fetch('http://mailer.sms.probasegroup.com/api/send/email', {
+      const response = await fetch('https://mailer.sms.probasegroup.com/api/send/email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

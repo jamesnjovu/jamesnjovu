@@ -11,7 +11,7 @@ const MouseTracker = () => {
     const [cursorSize, setCursorSize] = useState({ width: 40, height: 40 });
     const [isMobile, setIsMobile] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
-    
+
     const cursorRef = useRef(null);
 
     // Initialize and handle mouse movement
@@ -68,18 +68,18 @@ const MouseTracker = () => {
                 setIsHovering(isOverInteractive);
 
                 // Check if over image elements
-                const isImageElement = 
+                const isImageElement =
                     elemUnderCursor.tagName === 'IMG' ||
                     elemUnderCursor.closest('img') ||
                     elemUnderCursor.classList.contains('project-image') ||
                     elemUnderCursor.closest('.project-image') ||
-                    (elemUnderCursor.style && elemUnderCursor.style.backgroundImage && 
-                     elemUnderCursor.style.backgroundImage !== 'none');
-                
+                    (elemUnderCursor.style && elemUnderCursor.style.backgroundImage &&
+                        elemUnderCursor.style.backgroundImage !== 'none');
+
                 setIsOverImage(isImageElement && !isOverInteractive);
 
                 // Check if over text elements
-                const isTextElement = 
+                const isTextElement =
                     elemUnderCursor.tagName === 'P' ||
                     elemUnderCursor.tagName === 'SPAN' ||
                     elemUnderCursor.tagName === 'H1' ||
@@ -95,16 +95,16 @@ const MouseTracker = () => {
                     elemUnderCursor.closest('h1, h2, h3, h4, h5, h6') ||
                     elemUnderCursor.closest('li') ||
                     elemUnderCursor.closest('blockquote');
-                
+
                 setIsOverText(isTextElement && !isOverInteractive && !isImageElement);
 
                 // Check if over dark background
                 const computedStyle = window.getComputedStyle(elemUnderCursor);
                 const elemBgColor = computedStyle.backgroundColor;
-                
+
                 // Also check if the document is in dark mode
                 const isDarkMode = document.documentElement.classList.contains('dark');
-                
+
                 // Determine if background is dark
                 const isDark =
                     isDarkMode ||
@@ -140,13 +140,13 @@ const MouseTracker = () => {
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseenter', handleMouseEnter);
             document.addEventListener('mouseleave', handleMouseLeave);
-            
+
             // Capture the initial mouse position when the page loads
             if (typeof document !== 'undefined') {
                 // If the mouse is already in the window when the component loads
                 const currentMouseX = typeof window !== 'undefined' ? window.mouseX : 0;
                 const currentMouseY = typeof window !== 'undefined' ? window.mouseY : 0;
-                
+
                 if (currentMouseX && currentMouseY) {
                     setPosition({ x: currentMouseX, y: currentMouseY });
                     setVisible(true);
@@ -200,7 +200,7 @@ const MouseTracker = () => {
         if (!isMobile) {
             // Add 'cursor-none' class to body to hide the default cursor
             document.body.classList.add('custom-cursor');
-            
+
             return () => {
                 document.body.classList.remove('custom-cursor');
             };
@@ -219,7 +219,7 @@ const MouseTracker = () => {
         if (isOverImage) return { width: 60, height: 60 }; // Larger cursor for images
         return { width: 40, height: 40 }; // Default size
     };
-    
+
     const currentSize = getCursorSize();
 
     // Define cursor icon content based on context
@@ -284,17 +284,19 @@ const MouseTracker = () => {
             <div ref={cursorRef} style={cursorStyle} className="hardware-accelerated">
                 {isOverImage ? getCursorIcon() : <div style={innerDotStyle}></div>}
             </div>
-            
-            {/* Add inline styles to hide default cursor */}
-            <style jsx global>{`
-                body.custom-cursor, 
-                body.custom-cursor a, 
-                body.custom-cursor button,
-                body.custom-cursor input[type="submit"],
-                body.custom-cursor .cursor-pointer {
-                    cursor: none !important;
-                }
-            `}</style>
+
+            {/* Add inline styles directly without the problematic jsx attribute */}
+            <style>
+                {`
+                    body.custom-cursor, 
+                    body.custom-cursor a, 
+                    body.custom-cursor button,
+                    body.custom-cursor input[type="submit"],
+                    body.custom-cursor .cursor-pointer {
+                        cursor: none !important;
+                    }
+                `}
+            </style>
         </>
     );
 };

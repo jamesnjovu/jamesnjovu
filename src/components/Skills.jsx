@@ -1,10 +1,13 @@
+
+
+
 import { useState, useEffect, useRef } from 'react';
 import { FaCode, FaPeopleCarry, FaLanguage, FaStar } from 'react-icons/fa';
 
 const Skills = () => {
   const [activeTab, setActiveTab] = useState('technical');
   const sectionRef = useRef(null);
-  
+
   // Enhanced skill data with proficiency levels
   const skills = {
     technical: [
@@ -74,7 +77,7 @@ const Skills = () => {
 
   // Filter technical skills by category
   const getSkillsByCategory = (category) => {
-    return skills.technical.filter(skill => 
+    return skills.technical.filter(skill =>
       technicalCategories[category].includes(skill.name)
     );
   };
@@ -97,16 +100,15 @@ const Skills = () => {
     <section id="skills" className="section-container relative">
       <div ref={sectionRef} className="opacity-0">
         <h2 className="section-title">My Skills</h2>
-        
+
         <div className="mb-8 flex flex-wrap border-b border-gray-200 dark:border-gray-700">
           {['technical', 'soft', 'languages'].map((tab) => (
             <button
               key={tab}
-              className={`py-3 px-5 font-medium flex items-center gap-2 transition-all duration-300 ${
-                activeTab === tab
-                  ? 'border-b-2 border-primary-600 text-primary-600 dark:text-primary-400'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'
-              }`}
+              className={`py-3 px-5 font-medium flex items-center gap-2 transition-all duration-300 ${activeTab === tab
+                ? 'border-b-2 border-primary-600 text-primary-600 dark:text-primary-400'
+                : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'
+                }`}
               onClick={() => setActiveTab(tab)}
             >
               {getTabIcon(tab)}
@@ -114,7 +116,7 @@ const Skills = () => {
             </button>
           ))}
         </div>
-        
+
         <div className="animate-staggered">
           {activeTab === 'technical' && (
             <div className="space-y-10">
@@ -126,7 +128,7 @@ const Skills = () => {
                     </span>
                     {category}
                   </h3>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {getSkillsByCategory(category).map((skill) => (
                       <div key={skill.name} className="bg-white dark:bg-dark-bg-secondary p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
@@ -135,9 +137,9 @@ const Skills = () => {
                           <span className="text-sm text-gray-600 dark:text-gray-400">{skill.level}%</span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                          <div 
+                          <div
                             className="bg-gradient-primary h-2 rounded-full"
-                            style={{ 
+                            style={{
                               width: `${skill.level}%`,
                               animation: `progressAnimation 1s ease-out forwards`,
                               transformOrigin: 'left'
@@ -151,12 +153,12 @@ const Skills = () => {
               ))}
             </div>
           )}
-          
+
           {activeTab === 'soft' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {skills.soft.map((skill, index) => (
-                <div 
-                  key={skill.name} 
+                <div
+                  key={skill.name}
                   className="bg-white dark:bg-dark-bg-secondary rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center hover:-translate-y-1"
                 >
                   <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4">
@@ -169,9 +171,9 @@ const Skills = () => {
                   </div>
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">{skill.name}</h3>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
-                    <div 
+                    <div
                       className="bg-gradient-primary h-2 rounded-full"
-                      style={{ 
+                      style={{
                         width: `${skill.level}%`,
                         animation: `progressAnimation 1s ease-out forwards`,
                         transformOrigin: 'left'
@@ -182,7 +184,7 @@ const Skills = () => {
               ))}
             </div>
           )}
-          
+
           {activeTab === 'languages' && (
             <div className="max-w-2xl mx-auto">
               {skills.languages.map((language) => (
@@ -199,9 +201,9 @@ const Skills = () => {
                     <span className="text-gray-600 dark:text-gray-400">{language.level}%</span>
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                    <div 
+                    <div
                       className="bg-gradient-primary h-3 rounded-full relative"
-                      style={{ 
+                      style={{
                         width: `${language.level}%`,
                         animation: `progressAnimation 1s ease-out forwards`,
                         transformOrigin: 'left'
@@ -216,7 +218,7 @@ const Skills = () => {
                   </div>
                 </div>
               ))}
-              
+
               <div className="mt-8 bg-primary-50 dark:bg-primary-900/10 p-4 rounded-lg">
                 <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-2 flex items-center">
                   <FaLanguage className="mr-2 text-primary-600 dark:text-primary-400" />
@@ -224,19 +226,19 @@ const Skills = () => {
                 </h3>
                 <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
                   <li className="flex items-center">
-                    <span className="w-16 inline-block">90-100%:</span> 
+                    <span className="w-16 inline-block">90-100%:</span>
                     <span className="ml-2">Native/Fluent - Full professional proficiency</span>
                   </li>
                   <li className="flex items-center">
-                    <span className="w-16 inline-block">80-89%:</span> 
+                    <span className="w-16 inline-block">80-89%:</span>
                     <span className="ml-2">Advanced - Professional working proficiency</span>
                   </li>
                   <li className="flex items-center">
-                    <span className="w-16 inline-block">70-79%:</span> 
+                    <span className="w-16 inline-block">70-79%:</span>
                     <span className="ml-2">Upper Intermediate - Limited working proficiency</span>
                   </li>
                   <li className="flex items-center">
-                    <span className="w-16 inline-block">60-69%:</span> 
+                    <span className="w-16 inline-block">60-69%:</span>
                     <span className="ml-2">Intermediate - Basic professional proficiency</span>
                   </li>
                 </ul>
@@ -245,21 +247,23 @@ const Skills = () => {
           )}
         </div>
       </div>
-      
+
       {/* Decorative elements */}
       <div className="absolute -z-10 bottom-10 -left-20 w-64 h-64 bg-primary-200/20 dark:bg-primary-900/10 rounded-full blur-3xl"></div>
-      
-      {/* Add keyframes for progress bar animation */}
-      <style jsx>{`
-        @keyframes progressAnimation {
-          0% {
-            transform: scaleX(0);
+
+      {/* Use a regular style element instead of style jsx */}
+      <style>
+        {`
+          @keyframes progressAnimation {
+            0% {
+              transform: scaleX(0);
+            }
+            100% {
+              transform: scaleX(1);
+            }
           }
-          100% {
-            transform: scaleX(1);
-          }
-        }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };

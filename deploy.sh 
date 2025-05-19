@@ -1,8 +1,41 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-# abort on errors
-set -e
+# Deploy script for the portfolio website
+# This script builds and deploys the site to GitHub Pages
 
-# build
+set -e  # Exit immediately if a command exits with a non-zero status
+
+# Get the current branch
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+echo "🚀 Starting deployment process from branch: $CURRENT_BRANCH"
+
+# Make sure we're on the main branch
+if [ "$CURRENT_BRANCH" != "main" ]; then
+  echo "⚠️ Warning: You are not on the main branch. Continuing anyway..."
+  read -p "Press Enter to continue or Ctrl+C to abort..." 
+fi
+
+# Check for uncommitted changes
+if [ -n "$(git status --porcelain)" ]; then
+  echo "⚠️ Warning: You have uncommitted changes."
+  read -p "Press Enter to continue or Ctrl+C to abort..." 
+fi
+
+echo "📦 Installing dependencies..."
+npm ci
+
+echo "🔨 Building project..."
 npm run build
+
+echo "🧪 Testing build output..."
+if [ ! -d "dist" ]; then
+  echo "❌ Build failed: No dist directory found"
+  exit 1
+fi
+
+echo "📤 Deploying to GitHub Pages..."
 npm run deploy
+
+echo "✅ Deployment complete! Site should be live shortly at: https://jamesnjovu.github.io/jamesnjovu/"
+echo "Note: It may take a few minutes for changes to propagate through GitHub's servers."

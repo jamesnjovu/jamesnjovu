@@ -1,3 +1,4 @@
+
 name: Update GitLab Stats in README
 
 on:
@@ -11,68 +12,161 @@ jobs:
     steps:
       - name: Checkout GitHub Repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Fetch GitLab Contribution Stats
+        id: fetch-stats
+        continue-on-error: true  # Continue even if this step fails
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_HOST: "gitlab.probasegroup.com"
+          GITLAB_USER_ID: "james"
         run: |
-          GITLAB_TOKEN="${{ secrets.GITLAB_TOKEN }}"
-          GITLAB_HOST="gitlab.probasegroup.com"
-          GITLAB_USER_ID="james"
-
           CURRENT_YEAR=$(date +%Y)
           LAST_YEAR=$((CURRENT_YEAR - 1))
 
-          # Get total commits in 2025
-          TOTAL_COMMITS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=pushed&after=${CURRENT_YEAR}-01-01" | jq length)
+          # Check if GITLAB_TOKEN is set
+          if [ -z "$GITLAB_TOKEN" ]; then
+            echo "::error::GITLAB_TOKEN is not set. Please add it to your repository secrets."
+            exit 1
+          fi
+
+          echo "::group::Fetching GitLab statistics"
+          
+          # Fetch with error handling and retry mechanism
+          fetch_with_retry() {
+            local url=$1
+            local max_retries=3
+            local retry_count=0
+            local response=""
+            
+            while [ $retry_count -lt $max_retries ]; do
+              response=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "$url" || echo "")
+              
+              if [ -n "$response" ] && ! echo "$response" | grep -q "error"; then
+                echo "$response"
+                return 0
+              fi
+              
+              retry_count=$((retry_count + 1))
+              if [ $retry_count -lt $max_retries ]; then
+                echo "Retry attempt $retry_count for $url"
+                sleep 2
+              fi
+            done
+            
+            echo "Failed to fetch data after $max_retries attempts for $url"
+            return 1
+          }
+
+          # Get total commits in current year
+          COMMITS_RESPONSE=$(fetch_with_retry "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=pushed&after=${CURRENT_YEAR}-01-01")
+          if [ $? -eq 0 ]; then
+            TOTAL_COMMITS=$(echo "$COMMITS_RESPONSE" | jq length)
+            echo "Total commits in $CURRENT_YEAR: $TOTAL_COMMITS"
+          else
+            TOTAL_COMMITS="N/A"
+            echo "Failed to fetch commit data"
+          fi
 
           # Get total Merge Requests (PRs)
-          TOTAL_PRS=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=merged&after=${CURRENT_YEAR}-01-01" | jq length)
+          MRS_RESPONSE=$(fetch_with_retry "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=merged&after=${CURRENT_YEAR}-01-01")
+          if [ $? -eq 0 ]; then
+            TOTAL_PRS=$(echo "$MRS_RESPONSE" | jq length)
+            echo "Total PRs in $CURRENT_YEAR: $TOTAL_PRS"
+          else
+            TOTAL_PRS="N/A"
+            echo "Failed to fetch merge request data"
+          fi
 
           # Get total issues opened
-          TOTAL_ISSUES=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=opened&after=${CURRENT_YEAR}-01-01" | jq length)
+          ISSUES_RESPONSE=$(fetch_with_retry "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?action=opened&after=${CURRENT_YEAR}-01-01")
+          if [ $? -eq 0 ]; then
+            TOTAL_ISSUES=$(echo "$ISSUES_RESPONSE" | jq length)
+            echo "Total issues in $CURRENT_YEAR: $TOTAL_ISSUES"
+          else
+            TOTAL_ISSUES="N/A"
+            echo "Failed to fetch issues data"
+          fi
 
           # Get total contributions from last year
-          TOTAL_CONTRIBUTIONS_LAST_YEAR=$(curl -s --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-            "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?after=${LAST_YEAR}-01-01&before=${CURRENT_YEAR}-01-01" | jq length)
+          LAST_YEAR_RESPONSE=$(fetch_with_retry "https://$GITLAB_HOST/api/v4/users/$GITLAB_USER_ID/events?after=${LAST_YEAR}-01-01&before=${CURRENT_YEAR}-01-01")
+          if [ $? -eq 0 ]; then
+            TOTAL_CONTRIBUTIONS_LAST_YEAR=$(echo "$LAST_YEAR_RESPONSE" | jq length)
+            echo "Total contributions in $LAST_YEAR: $TOTAL_CONTRIBUTIONS_LAST_YEAR"
+          else
+            TOTAL_CONTRIBUTIONS_LAST_YEAR="N/A"
+            echo "Failed to fetch last year's contribution data"
+          fi
+          
+          echo "::endgroup::"
 
-          # Preserve original README and update only GitLab stats section
-          START_MARKER="<!-- START GITLAB STATS -->"
-          END_MARKER="<!-- END GITLAB STATS -->"
-
-          NEW_STATS=$(cat <<EOF
-          $START_MARKER
+          # Create stats with error handling
+          cat > gitlab_stats.md << EOF
+          <!-- START GITLAB STATS -->
           ### 🚀 My GitLab Contributions (Updated: $(date))
-          - **Total Commits (2025):** $TOTAL_COMMITS  
-          - **Total PRs (Merge Requests):** $TOTAL_PRS  
-          - **Total Issues Opened:** $TOTAL_ISSUES  
-          - **Total Contributions (Last Year - $LAST_YEAR):** $TOTAL_CONTRIBUTIONS_LAST_YEAR  
-          $END_MARKER
+          - **Total Commits (${CURRENT_YEAR}):** ${TOTAL_COMMITS}  
+          - **Total PRs (Merge Requests):** ${TOTAL_PRS}  
+          - **Total Issues Opened:** ${TOTAL_ISSUES}  
+          - **Total Contributions (Last Year - ${LAST_YEAR}):** ${TOTAL_CONTRIBUTIONS_LAST_YEAR}  
+          <!-- END GITLAB STATS -->
           EOF
-          )
+          
+          echo "Stats generated and saved to gitlab_stats.md"
 
-          # Insert stats in README while keeping other content intact
-          awk -v new_stats="$NEW_STATS" '
-          BEGIN {found=0}
-          {if ($0 == "<!-- START GITLAB STATS -->") {found=1; print new_stats; next} }
-          !found {print}
-          {if ($0 == "<!-- END GITLAB STATS -->") {found=0} }
-          ' README.md > README.tmp && mv README.tmp README.md
+      - name: Update README
+        if: steps.fetch-stats.outcome == 'success'
+        run: |
+          # If gitlab_stats.md doesn't exist, we'll skip this step
+          if [ ! -f gitlab_stats.md ]; then
+            echo "gitlab_stats.md not found, skipping README update"
+            exit 0
+          fi
+          
+          # Get content from stats file
+          STATS_CONTENT=$(cat gitlab_stats.md)
+          
+          # Use sed to replace the GitLab stats section
+          sed -i '/<!-- START GITLAB STATS -->/,/<!-- END GITLAB STATS -->/c\'"$STATS_CONTENT"'' README.md
+          
+          echo "README.md has been updated with latest GitLab stats"
 
       - name: Commit & Push Changes
+        if: steps.fetch-stats.outcome == 'success'
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
 
-          # Fetch the latest changes to avoid conflicts
-          git fetch
-          git pull origin main --rebase || git reset --hard origin/main  # ✅ Ensures the latest changes are present
+          # Check if there are changes to commit
+          if git diff --quiet README.md; then
+            echo "No changes to commit"
+            exit 0
+          fi
 
+          # Add, commit and push changes
           git add README.md
-          git commit -m "Updated GitLab stats" || echo "No changes to commit"
-
-          git push https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main
-
+          git commit -m "Updated GitLab stats [skip ci]"
+          
+          # Push with error handling
+          MAX_RETRIES=3
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if git push https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main; then
+              echo "Successfully pushed changes"
+              break
+            else
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "Push failed, retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+                git pull --rebase https://x-access-token:$GH_PAT@github.com/jamesnjovu/jamesnjovu.git main
+                sleep 2
+              else
+                echo "Failed to push changes after $MAX_RETRIES attempts"
+                exit 1
+              fi
+            fi
+          done

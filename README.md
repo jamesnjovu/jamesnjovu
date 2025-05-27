@@ -28,12 +28,13 @@ Senior Software Developer with expertise in building robust, high-performance ap
 
 ### Primary Technologies
 ```
-Elixir • Phoenix LiveView • PostgreSQL • JavaScript • Python
+Elixir • Phoenix • Phoenix LiveView • PostgreSQL • JavaScript • Python
 ```
 
 ### Backend Development
 ![Elixir](https://img.shields.io/badge/-Elixir-4B275F?style=flat-square&logo=elixir&logoColor=white)
 ![Phoenix](https://img.shields.io/badge/-Phoenix-FD4F00?style=flat-square&logo=phoenix&logoColor=white)
+![Phoenix LiveView](https://img.shields.io/badge/-Phoenix_LiveView-FD4F00?style=flat-square&logo=phoenix&logoColor=white)
 ![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
 ![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
 

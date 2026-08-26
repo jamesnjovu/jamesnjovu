@@ -1,12 +1,84 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { FaGithub, FaExternalLinkAlt, FaSearch, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { gsap, useGSAP, MOTION, prefersReducedMotion } from '../utils/animations';
 import NumberF from '../assets/images/projects/numberF.png';
 import UssdEmulator from '../assets/images/projects/ussdEmulator.png';
 import ExMpesa from '../assets/images/projects/exMpesa.png';
 import PineUi from '../assets/images/projects/pineUi.png';
 import ExMtnMomo from '../assets/images/projects/exMtnMomo.png'; // You'll need to add this image
 import ExLiveTable from '../assets/images/projects/exLiveTable.png'; // You'll need to add this image
+
+// Project data is static — defined at module scope so its identity is stable
+// across renders (and so the filtering effect does not re-run needlessly).
+const projects = [
+  {
+    title: 'Pine UI',
+    description: 'A comprehensive library of interactive UI components for Phoenix applications built with AlpineJS and TailwindCSS. Features 15+ components including animated text, interactive cards, form elements, buttons with loading states, tooltips, and badges.',
+    image: PineUi,
+    technologies: ['Elixir', 'Phoenix', 'TailwindCSS', 'AlpineJS', 'HEEx'],
+    category: 'library',
+    links: {
+      github: 'https://github.com/jamesnjovu/pine_ui_phoenix',
+      live: 'https://hex.pm/packages/pine_ui_phoenix'
+    }
+  },
+  {
+    "title": "Elixir Mpesa",
+    "description": "An Elixir library for integrating with the Vodacom M-Pesa OpenAPI. This package provides a simple and elegant way to integrate M-Pesa payment services into your Elixir applications, featuring session management, C2B/B2C/B2B payments, transaction status queries, and direct debit operations.",
+    "image": ExMpesa,
+    "technologies": ["Elixir", "API Integration", "Payment Processing", "Fintech", "Open Source", "Json"],
+    "category": "library",
+    "links": {
+      "github": "https://github.com/jamesnjovu/ex_mpesa",
+      "live": "https://hex.pm/packages/elixir_mpesa"
+    }
+  },
+  {
+    title: 'MTN MoMo API Client',
+    description: 'A comprehensive Elixir client for MTN Mobile Money API integration, allowing developers to easily implement MTN MoMo payments in their Phoenix/Elixir applications. The library supports collections, disbursements, and remittances with robust error handling and configuration options.',
+    image: ExMtnMomo,
+    technologies: ['Elixir', 'API Client', 'Payment Gateway', 'MTN MoMo', 'Fintech'],
+    category: 'library',
+    links: {
+      github: 'https://github.com/jamesnjovu/ex_mtn_momo',
+      live: 'https://hexdocs.pm/ex_mtn_momo/readme.html'
+    }
+  },
+  {
+    title: 'Live Table for Phoenix LiveView',
+    description: 'A powerful, customizable, and interactive data table component for Phoenix LiveView applications. Features include sortable columns, pagination, search functionality, custom formatting, and responsive design all with minimal configuration.',
+    image: ExLiveTable,
+    technologies: ['Elixir', 'Phoenix LiveView', 'DataTables', 'UI Component', 'HEEx'],
+    category: 'library',
+    links: {
+      github: 'https://github.com/jamesnjovu/ex_live_table',
+      live: 'https://hexdocs.pm/ex_live_table/readme.html'
+    }
+  },
+  {
+    title: 'Elixir Number Functions Library',
+    description: 'Built a popular dependency in Elixir to help with numeric formatting and conversions. Features include number to words conversion, currency formatting, and mathematical utilities used by developers across multiple applications.',
+    image: NumberF,
+    technologies: ['Elixir', 'Mathematics', 'Open Source', 'Package Development'],
+    category: 'library',
+    links: {
+      github: 'https://github.com/jamesnjovu/elixir_number_functions',
+      live: 'https://hex.pm/packages/number_f'
+    }
+  },
+  {
+    title: 'USSD Emulator',
+    description: 'A React-based web application that simulates USSD session flows by interacting with a backend API. Provides an intuitive interface for developers to test USSD applications without needing a physical device.',
+    image: UssdEmulator,
+    technologies: ['React', 'JavaScript', 'Vite', 'CSS3', 'REST API'],
+    category: 'frontend',
+    links: {
+      github: 'https://github.com/jamesnjovu/ussd-emulator',
+      live: 'https://jamesnjovu.github.io/ussd-emulator/'
+    }
+  },
+];
 
 const Projects = () => {
   const [filter, setFilter] = useState('all');
@@ -19,76 +91,11 @@ const Projects = () => {
 
   const sectionRef = useRef(null);
   const projectsGridRef = useRef(null);
+  const headingRef = useRef(null);
+  const controlsRef = useRef(null);
+  const cardGridRef = useRef(null);
 
   // Enhanced project data with additional libraries
-  const projects = [
-    {
-      title: 'Pine UI',
-      description: 'A comprehensive library of interactive UI components for Phoenix applications built with AlpineJS and TailwindCSS. Features 15+ components including animated text, interactive cards, form elements, buttons with loading states, tooltips, and badges.',
-      image: PineUi,
-      technologies: ['Elixir', 'Phoenix', 'TailwindCSS', 'AlpineJS', 'HEEx'],
-      category: 'library',
-      links: {
-        github: 'https://github.com/jamesnjovu/pine_ui_phoenix',
-        live: 'https://hex.pm/packages/pine_ui_phoenix'
-      }
-    },
-    {
-      "title": "Elixir Mpesa",
-      "description": "An Elixir library for integrating with the Vodacom M-Pesa OpenAPI. This package provides a simple and elegant way to integrate M-Pesa payment services into your Elixir applications, featuring session management, C2B/B2C/B2B payments, transaction status queries, and direct debit operations.",
-      "image": ExMpesa,
-      "technologies": ["Elixir", "API Integration", "Payment Processing", "Fintech", "Open Source", "Json"],
-      "category": "library",
-      "links": {
-        "github": "https://github.com/jamesnjovu/ex_mpesa",
-        "live": "https://hex.pm/packages/elixir_mpesa"
-      }
-    },
-    {
-      title: 'MTN MoMo API Client',
-      description: 'A comprehensive Elixir client for MTN Mobile Money API integration, allowing developers to easily implement MTN MoMo payments in their Phoenix/Elixir applications. The library supports collections, disbursements, and remittances with robust error handling and configuration options.',
-      image: ExMtnMomo,
-      technologies: ['Elixir', 'API Client', 'Payment Gateway', 'MTN MoMo', 'Fintech'],
-      category: 'library',
-      links: {
-        github: 'https://github.com/jamesnjovu/ex_mtn_momo',
-        live: 'https://hexdocs.pm/ex_mtn_momo/readme.html'
-      }
-    },
-    {
-      title: 'Live Table for Phoenix LiveView',
-      description: 'A powerful, customizable, and interactive data table component for Phoenix LiveView applications. Features include sortable columns, pagination, search functionality, custom formatting, and responsive design all with minimal configuration.',
-      image: ExLiveTable,
-      technologies: ['Elixir', 'Phoenix LiveView', 'DataTables', 'UI Component', 'HEEx'],
-      category: 'library',
-      links: {
-        github: 'https://github.com/jamesnjovu/ex_live_table',
-        live: 'https://hexdocs.pm/ex_live_table/readme.html'
-      }
-    },
-    {
-      title: 'Elixir Number Functions Library',
-      description: 'Built a popular dependency in Elixir to help with numeric formatting and conversions. Features include number to words conversion, currency formatting, and mathematical utilities used by developers across multiple applications.',
-      image: NumberF,
-      technologies: ['Elixir', 'Mathematics', 'Open Source', 'Package Development'],
-      category: 'library',
-      links: {
-        github: 'https://github.com/jamesnjovu/elixir_number_functions',
-        live: 'https://hex.pm/packages/number_f'
-      }
-    },
-    {
-      title: 'USSD Emulator',
-      description: 'A React-based web application that simulates USSD session flows by interacting with a backend API. Provides an intuitive interface for developers to test USSD applications without needing a physical device.',
-      image: UssdEmulator,
-      technologies: ['React', 'JavaScript', 'Vite', 'CSS3', 'REST API'],
-      category: 'frontend',
-      links: {
-        github: 'https://github.com/jamesnjovu/ussd-emulator',
-        live: 'https://jamesnjovu.github.io/ussd-emulator/'
-      }
-    },
-  ];
 
   // Check for mobile screen size
   useEffect(() => {
@@ -156,30 +163,41 @@ const Projects = () => {
     }
   };
 
-  // Intersection Observer for animation
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fadeInUp');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+  // Heading and controls reveal once, as the section scrolls into view.
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+      gsap.timeline({
+        scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+      })
+        .from(headingRef.current, { opacity: 0, y: MOTION.distance })
+        .from(controlsRef.current, { opacity: 0, y: 20 }, '-=0.45');
+    },
+    { scope: sectionRef }
+  );
 
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
+  // Cards re-animate whenever the visible set changes — filter, search or page —
+  // so the grid transitions instead of snapping to new content.
+  useGSAP(
+    () => {
+      if (prefersReducedMotion() || !cardGridRef.current) return;
+
+      const cards = gsap.utils.toArray('.project-card');
+      if (!cards.length) return;
+
+      gsap.from(cards, {
+        opacity: 0,
+        y: 32,
+        scale: 0.96,
+        duration: MOTION.duration,
+        stagger: 0.09,
+        ease: MOTION.ease,
+        scrollTrigger: { trigger: cardGridRef.current, start: 'top 90%', once: true },
+      });
+    },
+    { scope: sectionRef, dependencies: [paginatedProjects], revertOnUpdate: true }
+  );
 
   const categories = [
     { value: 'all', label: 'All Projects' },
@@ -189,16 +207,13 @@ const Projects = () => {
     { value: 'library', label: 'Libraries' }
   ];
 
-  // Calculate projects per page based on device
-  const projectsPerPage = isMobile ? 1 : 4;
-
   return (
-    <section id="projects" className="section-container relative overflow-hidden">
-      <div ref={sectionRef} className="opacity-0">
-        <h2 className="section-title">My Projects</h2>
+    <section id="projects" className="section-container relative overflow-hidden" ref={sectionRef}>
+      <div>
+        <h2 className="section-title" ref={headingRef}>My Projects</h2>
 
         {/* Search and Filter Controls */}
-        <div className="mb-8">
+        <div className="mb-8" ref={controlsRef}>
           <div className="flex flex-col md:flex-row gap-4 mb-6">
             <div className="relative flex-grow">
               <input
@@ -242,11 +257,11 @@ const Projects = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 stagger-children">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8" ref={cardGridRef}>
               {paginatedProjects.map((project, index) => (
                 <div
                   key={index}
-                  className="card project-card hover:shadow-xl"
+                  className="card project-card group hover:shadow-xl"
                 >
                   <div className="relative overflow-hidden h-48">
                     <img
@@ -254,7 +269,7 @@ const Projects = () => {
                       alt={project.title}
                       className="w-full h-full object-cover project-image"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                       <div className="p-4 text-white">
                         <div className="flex gap-4">
                           {project.links.github && (

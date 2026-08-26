@@ -1,9 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { FaGraduationCap, FaCertificate, FaMedal, FaCalendarAlt, FaUniversity } from 'react-icons/fa';
+import { gsap, useGSAP, MOTION, refreshScrollTriggers, prefersReducedMotion } from '../utils/animations';
 
 const Education = () => {
     const [activeEdu, setActiveEdu] = useState(null);
     const sectionRef = useRef(null);
+    const headingRef = useRef(null);
+    const trackRef = useRef(null);
+    const progressRef = useRef(null);
+    const detailRefs = useRef([]);
     
     const educations = [
         {
@@ -56,54 +61,96 @@ const Education = () => {
         }
     ];
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-          ([entry]) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('animate-fadeInUp');
-              observer.unobserve(entry.target);
+    // Timeline reveal: heading, then each milestone alternating in from its side.
+    useGSAP(
+        () => {
+            if (prefersReducedMotion()) {
+                gsap.set(progressRef.current, { scaleY: 1 });
+                return;
             }
-          },
-          { threshold: 0.1 }
-        );
-    
-        if (sectionRef.current) {
-          observer.observe(sectionRef.current);
-        }
-    
-        return () => {
-          if (sectionRef.current) {
-            observer.unobserve(sectionRef.current);
-          }
-        };
-      }, []);
 
-    // Handle animation for timeline items
-    useEffect(() => {
-        const timelineItems = document.querySelectorAll('.timeline-item');
-        
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-fadeInUp');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            },
-            { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
-        );
-        
-        timelineItems.forEach(item => {
-            observer.observe(item);
-        });
-        
-        return () => {
-            timelineItems.forEach(item => {
-                observer.unobserve(item);
+            gsap.from(headingRef.current, {
+                opacity: 0,
+                y: MOTION.distance,
+                scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
             });
-        };
-    }, []);
+
+            gsap.utils.toArray('.timeline-item').forEach((item, index) => {
+                gsap.from(item, {
+                    opacity: 0,
+                    x: index % 2 === 0 ? -40 : 40,
+                    duration: MOTION.duration,
+                    ease: MOTION.ease,
+                    scrollTrigger: { trigger: item, start: 'top 88%', once: true },
+                });
+
+                gsap.from(item.querySelector('.timeline-dot'), {
+                    scale: 0,
+                    opacity: 0,
+                    duration: MOTION.durationFast,
+                    ease: 'back.out(2.2)',
+                    scrollTrigger: { trigger: item, start: 'top 88%', once: true },
+                });
+            });
+
+            // The bright line fills in step with how far you have scrolled the timeline.
+            gsap.fromTo(
+                progressRef.current,
+                { scaleY: 0 },
+                {
+                    scaleY: 1,
+                    ease: 'none',
+                    transformOrigin: 'top center',
+                    scrollTrigger: {
+                        trigger: trackRef.current,
+                        start: 'top 75%',
+                        end: 'bottom 60%',
+                        scrub: 0.6,
+                    },
+                }
+            );
+
+            gsap.from('.edu-summary', {
+                opacity: 0,
+                y: MOTION.distance,
+                scrollTrigger: { trigger: '.edu-summary', start: MOTION.start, once: true },
+            });
+        },
+        { scope: sectionRef }
+    );
+
+    // Expanding a milestone slides its detail panel open.
+    useGSAP(
+        () => {
+            const panel = activeEdu === null ? null : detailRefs.current[activeEdu];
+            if (!panel) return;
+
+            if (prefersReducedMotion()) {
+                refreshScrollTriggers();
+                return;
+            }
+
+            gsap.timeline({
+                onComplete: () => {
+                    gsap.set(panel, { clearProps: 'height,overflow' });
+                    refreshScrollTriggers();
+                },
+            })
+                .from(panel, {
+                    height: 0,
+                    opacity: 0,
+                    duration: MOTION.durationFast,
+                    ease: MOTION.easeInOut,
+                    overflow: 'hidden',
+                })
+                .from(
+                    panel.querySelectorAll('h5, span, li'),
+                    { opacity: 0, y: 8, stagger: 0.02, duration: 0.3 },
+                    '-=0.2'
+                );
+        },
+        { scope: sectionRef, dependencies: [activeEdu] }
+    );
 
     // Toggle education details
     const toggleDetails = (index) => {
@@ -114,28 +161,19 @@ const Education = () => {
         }
     }
 
-    // Get icon based on education type
-    const getTypeIcon = (type) => {
-        switch (type) {
-            case 'degree':
-                return <FaGraduationCap className="text-primary-600 dark:text-primary-400" />;
-            case 'certification':
-                return <FaCertificate className="text-primary-600 dark:text-primary-400" />;
-            case 'certificate':
-                return <FaMedal className="text-primary-600 dark:text-primary-400" />;
-            default:
-                return <FaUniversity className="text-primary-600 dark:text-primary-400" />;
-        }
-    };
-
     return (
-        <section id="education" className="section-container relative">
-            <div ref={sectionRef} className="opacity-0">
-                <h2 className="section-title">Education</h2>
+        <section id="education" className="section-container relative" ref={sectionRef}>
+            <div>
+                <h2 className="section-title" ref={headingRef}>Education</h2>
 
-                <div className="relative">
-                    {/* Timeline line */}
-                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-400 to-primary-600 transform md:translate-x-px"></div>
+                <div className="relative" ref={trackRef}>
+                    {/* Timeline track: a muted rail with a progress line that fills as you scroll. */}
+                    <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gray-200 dark:bg-gray-700 transform md:translate-x-px" aria-hidden="true"></div>
+                    <div
+                        ref={progressRef}
+                        aria-hidden="true"
+                        className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 origin-top bg-gradient-to-b from-primary-400 to-primary-600 transform md:translate-x-px"
+                    ></div>
 
                     <div className="space-y-12">
                         {educations.map((edu, index) => (
@@ -143,11 +181,10 @@ const Education = () => {
                                 key={index} 
                                 className={`timeline-item relative md:flex ${
                                     index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                                } opacity-0`}
-                                style={{ animationDelay: `${index * 0.2}s` }}
+                                }`}
                             >
                                 {/* Timeline dot */}
-                                <div className="absolute left-4 md:left-1/2 top-0 h-8 w-8 rounded-full bg-white dark:bg-dark-bg-secondary border-4 border-primary-600 dark:border-primary-400 flex items-center justify-center transform -translate-x-3.5 md:-translate-x-4 z-10">
+                                <div className="timeline-dot absolute left-4 md:left-1/2 top-0 h-8 w-8 rounded-full bg-white dark:bg-dark-bg-secondary border-4 border-primary-600 dark:border-primary-400 flex items-center justify-center transform -translate-x-3.5 md:-translate-x-4 z-10">
                                     {edu.icon}
                                 </div>
 
@@ -192,7 +229,10 @@ const Education = () => {
                                         <p className="mt-4 text-gray-700 dark:text-gray-300">{edu.details}</p>
 
                                         {activeEdu === index && (
-                                            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 animate-fadeIn">
+                                            <div
+                                                className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"
+                                                ref={(el) => (detailRefs.current[index] = el)}
+                                            >
                                                 {edu.courses && (
                                                     <div className="mb-4">
                                                         <h5 className="font-medium text-gray-800 dark:text-gray-200 mb-2">Key Courses:</h5>
@@ -257,7 +297,7 @@ const Education = () => {
                 </div>
                 
                 {/* Education summary */}
-                <div className="mt-16 bg-white dark:bg-dark-bg-secondary p-6 rounded-lg shadow-md animate-staggered">
+                <div className="edu-summary mt-16 bg-white dark:bg-dark-bg-secondary p-6 rounded-lg shadow-md">
                     <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Education Summary</h3>
                     <p className="text-gray-700 dark:text-gray-300 mb-4">
                         My educational background combines formal academic training in Computer Science with specialized technical certifications, providing a solid foundation in both theoretical knowledge and practical skills in software development, networking, and system administration.

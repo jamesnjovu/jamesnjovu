@@ -105,9 +105,6 @@ Published Elixir packages, used in production and available on Hex.pm.
   <img height="165em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=jamesnjovu&theme=tokyonight&layout=compact&hide_border=true" alt="Top languages" />
 </div>
 
-<!-- START GITLAB STATS -->
-<!-- END GITLAB STATS -->
-
 ---
 
 ## Contact

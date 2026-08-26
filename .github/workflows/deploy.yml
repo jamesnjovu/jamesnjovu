@@ -54,9 +54,10 @@ jobs:
           echo "dist/ contains $(find dist -type f | wc -l | tr -d ' ') files"
 
       # Everything above runs for pull requests too, so a PR is validated
-      # before merge. Only a push to main publishes the site.
+      # before merge. Publishing is limited to main, by push or by manual
+      # dispatch — never from a pull request.
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist

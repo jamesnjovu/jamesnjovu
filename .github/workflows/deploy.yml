@@ -21,6 +21,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    # Needed by the deploy step to push the built site to gh-pages.
+    # Pull requests from forks get a read-only token regardless.
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -56,4 +61,3 @@ jobs:
         with:
           folder: dist
           branch: gh-pages
-          token: ${{ secrets.GH_PAT }}

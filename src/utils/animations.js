@@ -32,6 +32,12 @@ export const prefersReducedMotion = () =>
 /**
  * Reveal one or more elements as they scroll into view.
  * Pass `from` to choose the direction the element travels from.
+ *
+ * Always fromTo, never from: ScrollTrigger.refresh() (which also fires on load
+ * and resize) calls invalidate() on its animations, and a from() tween re-reads
+ * its end value from the live DOM at that point — by which time immediateRender
+ * has already set the element to opacity 0. It would then record 0 as the END
+ * value and "complete" into invisibility. Stating both ends explicitly is immune.
  */
 export const revealOnScroll = (targets, options = {}) => {
   const {
@@ -54,20 +60,25 @@ export const revealOnScroll = (targets, options = {}) => {
     none: {},
   };
 
-  return gsap.from(targets, {
-    opacity: 0,
-    ...offsets[from],
-    ...(scale ? { scale } : {}),
-    duration,
-    delay,
-    stagger,
-    ease: MOTION.ease,
-    scrollTrigger: {
-      trigger: trigger || targets,
-      start,
-      once,
-    },
-  });
+  return gsap.fromTo(
+    targets,
+    { opacity: 0, ...offsets[from], ...(scale ? { scale } : {}) },
+    {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      ...(scale ? { scale: 1 } : {}),
+      duration,
+      delay,
+      stagger,
+      ease: MOTION.ease,
+      scrollTrigger: {
+        trigger: trigger || targets,
+        start,
+        once,
+      },
+    }
+  );
 };
 
 /**
@@ -84,15 +95,19 @@ export const revealHeading = (element, options = {}) => {
     mask: 'lines',
   });
 
-  const tween = gsap.from(split[type], {
-    yPercent: 110,
-    opacity: 0,
-    duration: MOTION.duration,
-    ease: MOTION.ease,
-    stagger,
-    delay,
-    ...(scrollTrigger ? { scrollTrigger } : {}),
-  });
+  const tween = gsap.fromTo(
+    split[type],
+    { yPercent: 110, opacity: 0 },
+    {
+      yPercent: 0,
+      opacity: 1,
+      duration: MOTION.duration,
+      ease: MOTION.ease,
+      stagger,
+      delay,
+      ...(scrollTrigger ? { scrollTrigger } : {}),
+    }
+  );
 
   // Hand back a revert so callers can clean the split markup up.
   tween.revertSplit = () => split.revert();

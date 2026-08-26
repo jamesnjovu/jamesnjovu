@@ -41,22 +41,37 @@ const About = () => {
       // Hero entrance — one timeline so the sequence reads as a single motion.
       const tl = gsap.timeline({ defaults: { ease: MOTION.ease } });
 
-      tl.from(headingRef.current, {
-        opacity: 0,
-        y: 40,
-        duration: MOTION.durationSlow,
-        clipPath: 'inset(0 0 100% 0)',
-      })
+      tl.fromTo(
+        headingRef.current,
+        { opacity: 0, y: 40, clipPath: 'inset(0 0 100% 0)' },
+        { opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', duration: MOTION.durationSlow }
+      )
         .add(revealHeading(roleRef.current, { type: 'words', stagger: 0.05 }), '-=0.75')
-        .from(summaryRef.current, { opacity: 0, y: MOTION.distance }, '-=0.5')
-        .from(ctaRef.current.children, { opacity: 0, y: 20, stagger: 0.1 }, '-=0.45')
-        .from(statsRef.current.children, { opacity: 0, y: 24, stagger: 0.12 }, '-=0.35')
-        .from(
+        .fromTo(summaryRef.current, { opacity: 0, y: MOTION.distance }, { opacity: 1, y: 0 }, '-=0.5')
+        .fromTo(
+          ctaRef.current.children,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, stagger: 0.1 },
+          '-=0.45'
+        )
+        .fromTo(
+          statsRef.current.children,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, stagger: 0.12 },
+          '-=0.35'
+        )
+        .fromTo(
           portraitRef.current,
-          { opacity: 0, scale: 0.88, duration: MOTION.durationSlow, ease: 'power2.out' },
+          { opacity: 0, scale: 0.88 },
+          { opacity: 1, scale: 1, duration: MOTION.durationSlow, ease: 'power2.out' },
           0.15
         )
-        .from(badgeRef.current, { opacity: 0, scale: 0.4, ease: 'back.out(2)' }, '-=0.4');
+        .fromTo(
+          badgeRef.current,
+          { opacity: 0, scale: 0.4 },
+          { opacity: 1, scale: 1, ease: 'back.out(2)' },
+          '-=0.4'
+        );
 
       // Count the stats up once the entrance has settled.
       statRefs.current.forEach((el, i) => {

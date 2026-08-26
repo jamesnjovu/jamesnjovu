@@ -58,18 +58,26 @@ const Footer = () => {
 
       if (prefersReducedMotion()) return;
 
-      gsap.from('.footer-col', {
-        opacity: 0,
-        y: MOTION.distance,
-        stagger: 0.12,
-        scrollTrigger: { trigger: footerRef.current, start: 'top 90%', once: true },
-      });
+      gsap.fromTo(
+        '.footer-col',
+        { opacity: 0, y: MOTION.distance },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.12,
+          scrollTrigger: { trigger: footerRef.current, start: 'top 90%', once: true },
+        }
+      );
 
-      gsap.from('.footer-bottom', {
-        opacity: 0,
-        y: 16,
-        scrollTrigger: { trigger: footerRef.current, start: 'top 70%', once: true },
-      });
+      gsap.fromTo(
+        '.footer-bottom',
+        { opacity: 0, y: 16 },
+        {
+          opacity: 1,
+          y: 0,
+          scrollTrigger: { trigger: footerRef.current, start: 'top 70%', once: true },
+        }
+      );
     },
     { scope: footerRef }
   );

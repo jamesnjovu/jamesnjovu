@@ -171,8 +171,8 @@ const Projects = () => {
       gsap.timeline({
         scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
       })
-        .from(headingRef.current, { opacity: 0, y: MOTION.distance })
-        .from(controlsRef.current, { opacity: 0, y: 20 }, '-=0.45');
+        .fromTo(headingRef.current, { opacity: 0, y: MOTION.distance }, { opacity: 1, y: 0 })
+        .fromTo(controlsRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0 }, '-=0.45');
     },
     { scope: sectionRef }
   );
@@ -186,15 +186,19 @@ const Projects = () => {
       const cards = gsap.utils.toArray('.project-card');
       if (!cards.length) return;
 
-      gsap.from(cards, {
-        opacity: 0,
-        y: 32,
-        scale: 0.96,
-        duration: MOTION.duration,
-        stagger: 0.09,
-        ease: MOTION.ease,
-        scrollTrigger: { trigger: cardGridRef.current, start: 'top 90%', once: true },
-      });
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 32, scale: 0.96 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: MOTION.duration,
+          stagger: 0.09,
+          ease: MOTION.ease,
+          scrollTrigger: { trigger: cardGridRef.current, start: 'top 90%', once: true },
+        }
+      );
     },
     { scope: sectionRef, dependencies: [paginatedProjects], revertOnUpdate: true }
   );

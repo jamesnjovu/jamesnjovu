@@ -69,28 +69,40 @@ const Education = () => {
                 return;
             }
 
-            gsap.from(headingRef.current, {
-                opacity: 0,
-                y: MOTION.distance,
-                scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
-            });
+            gsap.fromTo(
+                headingRef.current,
+                { opacity: 0, y: MOTION.distance },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+                }
+            );
 
             gsap.utils.toArray('.timeline-item').forEach((item, index) => {
-                gsap.from(item, {
-                    opacity: 0,
-                    x: index % 2 === 0 ? -40 : 40,
-                    duration: MOTION.duration,
-                    ease: MOTION.ease,
-                    scrollTrigger: { trigger: item, start: 'top 88%', once: true },
-                });
+                gsap.fromTo(
+                    item,
+                    { opacity: 0, x: index % 2 === 0 ? -40 : 40 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        duration: MOTION.duration,
+                        ease: MOTION.ease,
+                        scrollTrigger: { trigger: item, start: 'top 88%', once: true },
+                    }
+                );
 
-                gsap.from(item.querySelector('.timeline-dot'), {
-                    scale: 0,
-                    opacity: 0,
-                    duration: MOTION.durationFast,
-                    ease: 'back.out(2.2)',
-                    scrollTrigger: { trigger: item, start: 'top 88%', once: true },
-                });
+                gsap.fromTo(
+                    item.querySelector('.timeline-dot'),
+                    { scale: 0, opacity: 0 },
+                    {
+                        scale: 1,
+                        opacity: 1,
+                        duration: MOTION.durationFast,
+                        ease: 'back.out(2.2)',
+                        scrollTrigger: { trigger: item, start: 'top 88%', once: true },
+                    }
+                );
             });
 
             // The bright line fills in step with how far you have scrolled the timeline.
@@ -110,11 +122,15 @@ const Education = () => {
                 }
             );
 
-            gsap.from('.edu-summary', {
-                opacity: 0,
-                y: MOTION.distance,
-                scrollTrigger: { trigger: '.edu-summary', start: MOTION.start, once: true },
-            });
+            gsap.fromTo(
+                '.edu-summary',
+                { opacity: 0, y: MOTION.distance },
+                {
+                    opacity: 1,
+                    y: 0,
+                    scrollTrigger: { trigger: '.edu-summary', start: MOTION.start, once: true },
+                }
+            );
         },
         { scope: sectionRef }
     );
@@ -136,16 +152,20 @@ const Education = () => {
                     refreshScrollTriggers();
                 },
             })
-                .from(panel, {
-                    height: 0,
-                    opacity: 0,
-                    duration: MOTION.durationFast,
-                    ease: MOTION.easeInOut,
-                    overflow: 'hidden',
-                })
-                .from(
+                .fromTo(
+                    panel,
+                    { height: 0, opacity: 0, overflow: 'hidden' },
+                    {
+                        height: 'auto',
+                        opacity: 1,
+                        duration: MOTION.durationFast,
+                        ease: MOTION.easeInOut,
+                    }
+                )
+                .fromTo(
                     panel.querySelectorAll('h5, span, li'),
-                    { opacity: 0, y: 8, stagger: 0.02, duration: 0.3 },
+                    { opacity: 0, y: 8 },
+                    { opacity: 1, y: 0, stagger: 0.02, duration: 0.3 },
                     '-=0.2'
                 );
         },

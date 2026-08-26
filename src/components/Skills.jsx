@@ -70,18 +70,26 @@ const Skills = () => {
     () => {
       if (prefersReducedMotion()) return;
 
-      gsap.from(headingRef.current, {
-        opacity: 0,
-        y: MOTION.distance,
-        scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
-      });
+      gsap.fromTo(
+        headingRef.current,
+        { opacity: 0, y: MOTION.distance },
+        {
+          opacity: 1,
+          y: 0,
+          scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+        }
+      );
 
-      gsap.from('.skills-tab', {
-        opacity: 0,
-        y: 16,
-        stagger: MOTION.stagger,
-        scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
-      });
+      gsap.fromTo(
+        '.skills-tab',
+        { opacity: 0, y: 16 },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: MOTION.stagger,
+          scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+        }
+      );
     },
     { scope: sectionRef }
   );
@@ -101,8 +109,17 @@ const Skills = () => {
         scrollTrigger: { trigger: panelRef.current, start: 'top 90%', once: true },
       });
 
-      tl.from('.skill-group', { opacity: 0, y: 24, stagger: 0.1, duration: MOTION.durationFast })
-        .from('.skill-card', { opacity: 0, y: 18, stagger: 0.03, duration: MOTION.durationFast }, '-=0.3')
+      tl.fromTo(
+        '.skill-group',
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, stagger: 0.1, duration: MOTION.durationFast }
+      )
+        .fromTo(
+          '.skill-card',
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, stagger: 0.03, duration: MOTION.durationFast },
+          '-=0.3'
+        )
         .fromTo(
           bars,
           { scaleX: 0 },

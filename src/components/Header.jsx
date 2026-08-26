@@ -43,15 +43,21 @@ const Header = () => {
             if (prefersReducedMotion()) return;
 
             gsap.timeline({ defaults: { ease: MOTION.ease } })
-                .from(logoRef.current, { opacity: 0, y: -20, duration: MOTION.durationFast })
-                .from(
+                .fromTo(
+                    logoRef.current,
+                    { opacity: 0, y: -20 },
+                    { opacity: 1, y: 0, duration: MOTION.durationFast }
+                )
+                .fromTo(
                     navRef.current.children,
-                    { opacity: 0, y: -14, stagger: 0.06, duration: MOTION.durationFast },
+                    { opacity: 0, y: -14 },
+                    { opacity: 1, y: 0, stagger: 0.06, duration: MOTION.durationFast },
                     '-=0.2'
                 )
-                .from(
+                .fromTo(
                     actionsRef.current.children,
-                    { opacity: 0, y: -14, stagger: 0.06, duration: MOTION.durationFast },
+                    { opacity: 0, y: -14 },
+                    { opacity: 1, y: 0, stagger: 0.06, duration: MOTION.durationFast },
                     '-=0.3'
                 );
         },
@@ -75,7 +81,12 @@ const Header = () => {
                 gsap.timeline()
                     .set(menu, { autoAlpha: 1 })
                     .fromTo(menu, { y: -24, opacity: 0 }, { y: 0, opacity: 1, duration: MOTION.durationFast })
-                    .from(links, { opacity: 0, x: -16, stagger: 0.05, duration: 0.3 }, '-=0.15');
+                    .fromTo(
+                        links,
+                        { opacity: 0, x: -16 },
+                        { opacity: 1, x: 0, stagger: 0.05, duration: 0.3 },
+                        '-=0.15'
+                    );
             } else {
                 gsap.to(menu, {
                     autoAlpha: 0,

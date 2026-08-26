@@ -115,17 +115,19 @@ const Contact = () => {
         scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
       });
 
-      tl.from(headingRef.current, { opacity: 0, y: MOTION.distance })
-        .from(infoPanelRef.current, { opacity: 0, x: -40 }, '-=0.4')
-        .from(formPanelRef.current, { opacity: 0, x: 40 }, '<')
-        .from(
+      tl.fromTo(headingRef.current, { opacity: 0, y: MOTION.distance }, { opacity: 1, y: 0 })
+        .fromTo(infoPanelRef.current, { opacity: 0, x: -40 }, { opacity: 1, x: 0 }, '-=0.4')
+        .fromTo(formPanelRef.current, { opacity: 0, x: 40 }, { opacity: 1, x: 0 }, '<')
+        .fromTo(
           infoPanelRef.current.querySelectorAll('.contact-row'),
-          { opacity: 0, y: 16, stagger: 0.08, duration: MOTION.durationFast },
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, stagger: 0.08, duration: MOTION.durationFast },
           '-=0.4'
         )
-        .from(
+        .fromTo(
           formPanelRef.current.querySelectorAll('.form-field'),
-          { opacity: 0, y: 16, stagger: 0.07, duration: MOTION.durationFast },
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, stagger: 0.07, duration: MOTION.durationFast },
           '-=0.5'
         );
     },

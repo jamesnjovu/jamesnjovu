@@ -89,16 +89,23 @@ const Experience = () => {
         scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
       });
 
-      tl.from(headingRef.current, { opacity: 0, y: MOTION.distance })
-        .from(
+      tl.fromTo(headingRef.current, { opacity: 0, y: MOTION.distance }, { opacity: 1, y: 0 })
+        .fromTo(
           timelineRef.current,
-          { scaleY: 0, transformOrigin: 'top center', duration: MOTION.durationSlow, ease: MOTION.easeInOut },
+          { scaleY: 0 },
+          {
+            scaleY: 1,
+            transformOrigin: 'top center',
+            duration: MOTION.durationSlow,
+            ease: MOTION.easeInOut,
+          },
           '-=0.4'
         )
-        .from(
+        .fromTo(
           '.experience-card',
-          { opacity: 0, x: -40, stagger: 0.15, duration: MOTION.duration },
-          '-=0.85'
+          { opacity: 0, x: -40 },
+          { opacity: 1, x: 0, stagger: 0.12, duration: MOTION.duration },
+          '-=1.15'
         );
     },
     { scope: sectionRef }
@@ -122,15 +129,14 @@ const Experience = () => {
         },
       });
 
-      tl.from(panel, {
-        height: 0,
-        opacity: 0,
-        duration: MOTION.durationFast,
-        ease: MOTION.easeInOut,
-        overflow: 'hidden',
-      }).from(
+      tl.fromTo(
+        panel,
+        { height: 0, opacity: 0, overflow: 'hidden' },
+        { height: 'auto', opacity: 1, duration: MOTION.durationFast, ease: MOTION.easeInOut }
+      ).fromTo(
         panel.querySelectorAll('.detail-row'),
-        { opacity: 0, x: -16, stagger: 0.04, duration: MOTION.durationFast },
+        { opacity: 0, x: -16 },
+        { opacity: 1, x: 0, stagger: 0.04, duration: MOTION.durationFast },
         '-=0.2'
       );
     },

@@ -1,32 +1,57 @@
-name: Deploy to GitHub Pages
+name: Build & Deploy
 
 on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:  # Allow manual trigger
+
+# A newer push to the same branch/PR makes an in-flight run redundant.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm ci
-        
+
+      - name: Lint
+        run: npm run lint
+
       - name: Build
         run: npm run build
-        
+
+      - name: Verify build output
+        run: |
+          if [ ! -d dist ] || [ -z "$(ls -A dist)" ]; then
+            echo "::error::Build produced no output in dist/"
+            exit 1
+          fi
+          echo "dist/ contains $(find dist -type f | wc -l | tr -d ' ') files"
+
+      # Everything above runs for pull requests too, so a PR is validated
+      # before merge. Only a push to main publishes the site.
       - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist

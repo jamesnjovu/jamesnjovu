@@ -1,12 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { FaBriefcase, FaChevronDown, FaChevronUp, FaStar, FaTrophy, FaArrowRight } from 'react-icons/fa';
+import { gsap, useGSAP, MOTION, refreshScrollTriggers, prefersReducedMotion } from '../utils/animations';
 
 const Experience = () => {
   const [expandedItem, setExpandedItem] = useState(0);
   const sectionRef = useRef(null);
-  // Create refs for each experience item
+  const headingRef = useRef(null);
+  const timelineRef = useRef(null);
   const experienceRefs = useRef([]);
-  
+  const detailRefs = useRef([]);
+
   const experiences = [
     {
       company: 'Probase Limited Zambia',
@@ -66,135 +69,177 @@ const Experience = () => {
     }
   ];
 
-  // Initialize refs for each experience item
-  useEffect(() => {
-    experienceRefs.current = experienceRefs.current.slice(0, experiences.length);
-  }, [experiences.length]);
-
-  // Function to handle expanding item and scrolling to it
   const handleExpandItem = (index) => {
     setExpandedItem(index);
-    
-    // Scroll to the selected experience with a slight delay to ensure DOM update
+
     setTimeout(() => {
       const isMobile = window.innerWidth < 768;
       if (isMobile && experienceRefs.current[index]) {
-        experienceRefs.current[index].scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
+        experienceRefs.current[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 100);
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fadeInUp');
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
+  // Heading, timeline spine and cards reveal as the section scrolls in.
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+      });
 
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      tl.from(headingRef.current, { opacity: 0, y: MOTION.distance })
+        .from(
+          timelineRef.current,
+          { scaleY: 0, transformOrigin: 'top center', duration: MOTION.durationSlow, ease: MOTION.easeInOut },
+          '-=0.4'
+        )
+        .from(
+          '.experience-card',
+          { opacity: 0, x: -40, stagger: 0.15, duration: MOTION.duration },
+          '-=0.85'
+        );
+    },
+    { scope: sectionRef }
+  );
+
+  // Expand/collapse: animate the panel open from zero height and cascade the rows.
+  useGSAP(
+    () => {
+      const panel = detailRefs.current[expandedItem];
+      if (!panel) return;
+
+      if (prefersReducedMotion()) {
+        refreshScrollTriggers();
+        return;
       }
-    };
-  }, []);
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.set(panel, { clearProps: 'height,overflow' });
+          refreshScrollTriggers();
+        },
+      });
+
+      tl.from(panel, {
+        height: 0,
+        opacity: 0,
+        duration: MOTION.durationFast,
+        ease: MOTION.easeInOut,
+        overflow: 'hidden',
+      }).from(
+        panel.querySelectorAll('.detail-row'),
+        { opacity: 0, x: -16, stagger: 0.04, duration: MOTION.durationFast },
+        '-=0.2'
+      );
+    },
+    { scope: sectionRef, dependencies: [expandedItem] }
+  );
 
   return (
-    <section id="experience" className="section-container relative">
-      <div ref={sectionRef} className="opacity-0">
-        <h2 className="section-title">Work Experience</h2>
-        
-        <div className="space-y-8 stagger-children">
-          {experiences.map((exp, index) => (
-            <div 
-              key={index}
-              ref={el => experienceRefs.current[index] = el}
-              className={`p-6 rounded-lg transition-all duration-300 cursor-pointer experience-card ${
-                expandedItem === index 
-                ? 'bg-primary-50 dark:bg-primary-900/20 shadow-lg border-l-4 border-primary-600' 
-                : 'bg-white dark:bg-gray-800/50 hover:bg-primary-50 dark:hover:bg-primary-900/10 border-l-4 border-transparent'
-              }`}
-              onClick={() => handleExpandItem(index)}
-            >
-              <div className="flex justify-between items-start">
-                <div className="flex gap-4">
-                  <div className="mt-1">
-                    <div className="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 flex items-center justify-center">
-                      <FaBriefcase />
+    <section id="experience" className="section-container relative" ref={sectionRef}>
+      <div>
+        <h2 className="section-title" ref={headingRef}>
+          Work Experience
+        </h2>
+
+        <div className="relative">
+          {/* Timeline spine — draws itself as the section enters. */}
+          <div
+            ref={timelineRef}
+            aria-hidden="true"
+            className="hidden md:block absolute left-5 top-2 bottom-2 w-px bg-gradient-to-b from-primary-500 via-primary-400 to-transparent"
+          ></div>
+
+          <div className="space-y-8">
+            {experiences.map((exp, index) => (
+              <div
+                key={index}
+                ref={(el) => (experienceRefs.current[index] = el)}
+                className={`experience-card p-6 rounded-lg transition-all duration-300 cursor-pointer ${
+                  expandedItem === index
+                    ? 'bg-primary-50 dark:bg-primary-900/20 shadow-lg border-l-4 border-primary-600'
+                    : 'bg-white dark:bg-gray-800/50 hover:bg-primary-50 dark:hover:bg-primary-900/10 border-l-4 border-transparent'
+                }`}
+                onClick={() => handleExpandItem(index)}
+              >
+                <div className="flex justify-between items-start">
+                  <div className="flex gap-4">
+                    <div className="mt-1">
+                      <div className="h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 flex items-center justify-center">
+                        <FaBriefcase />
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400">{exp.position}</h3>
+                      <h4 className="text-lg font-medium">{exp.company}</h4>
                     </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400">{exp.position}</h3>
-                    <h4 className="text-lg font-medium">{exp.company}</h4>
+                  <div className="flex flex-col items-end">
+                    <span className="text-gray-600 dark:text-gray-400 text-sm font-medium px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700">
+                      {exp.period}
+                    </span>
+                    <button
+                      className="mt-2 text-primary-600 dark:text-primary-400"
+                      aria-label={expandedItem === index ? 'Collapse' : 'Expand'}
+                      aria-expanded={expandedItem === index}
+                    >
+                      {expandedItem === index ? <FaChevronUp /> : <FaChevronDown />}
+                    </button>
                   </div>
                 </div>
-                <div className="flex flex-col items-end">
-                  <span className="text-gray-600 dark:text-gray-400 text-sm font-medium px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-700">{exp.period}</span>
-                  <button className="mt-2 text-primary-600 dark:text-primary-400" aria-label={expandedItem === index ? "Collapse" : "Expand"}>
-                    {expandedItem === index ? <FaChevronUp /> : <FaChevronDown />}
-                  </button>
-                </div>
+
+                <p className="mt-4 text-gray-700 dark:text-gray-300">{exp.description}</p>
+
+                {expandedItem === index && (
+                  <div className="mt-6 space-y-6" ref={(el) => (detailRefs.current[index] = el)}>
+                    <div className="detail-row">
+                      <h5 className="flex items-center font-medium text-primary-600 dark:text-primary-400 mb-2">
+                        <FaStar className="mr-2" /> Key Responsibilities:
+                      </h5>
+                      <ul className="space-y-2 text-gray-700 dark:text-gray-300 ml-5">
+                        {exp.responsibilities.map((responsibility, i) => (
+                          <li key={i} className="detail-row flex items-start">
+                            <FaArrowRight className="text-primary-600 dark:text-primary-400 mt-1 mr-2 text-sm" />
+                            <span>{responsibility}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="detail-row">
+                      <h5 className="flex items-center font-medium text-primary-600 dark:text-primary-400 mb-2">
+                        <FaTrophy className="mr-2" /> Key Achievements:
+                      </h5>
+                      <ul className="space-y-2 text-gray-700 dark:text-gray-300 ml-5">
+                        {exp.achievements.map((achievement, i) => (
+                          <li key={i} className="detail-row flex items-start">
+                            <FaArrowRight className="text-primary-600 dark:text-primary-400 mt-1 mr-2 text-sm" />
+                            <span>{achievement}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="detail-row pt-4 border-t border-gray-200 dark:border-gray-700">
+                      <h5 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Technologies:</h5>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.technologies.map((tech, i) => (
+                          <span key={i} className="skill-tag">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              
-              <p className="mt-4 text-gray-700 dark:text-gray-300">{exp.description}</p>
-              
-              {expandedItem === index && (
-                <div className="mt-6 space-y-6 animate-fadeIn">
-                  <div>
-                    <h5 className="flex items-center font-medium text-primary-600 dark:text-primary-400 mb-2">
-                      <FaStar className="mr-2" /> Key Responsibilities:
-                    </h5>
-                    <ul className="space-y-2 text-gray-700 dark:text-gray-300 ml-5">
-                      {exp.responsibilities.map((responsibility, i) => (
-                        <li key={i} className="flex items-start">
-                          <FaArrowRight className="text-primary-600 dark:text-primary-400 mt-1 mr-2 text-sm" />
-                          <span>{responsibility}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h5 className="flex items-center font-medium text-primary-600 dark:text-primary-400 mb-2">
-                      <FaTrophy className="mr-2" /> Key Achievements:
-                    </h5>
-                    <ul className="space-y-2 text-gray-700 dark:text-gray-300 ml-5">
-                      {exp.achievements.map((achievement, i) => (
-                        <li key={i} className="flex items-start">
-                          <FaArrowRight className="text-primary-600 dark:text-primary-400 mt-1 mr-2 text-sm" />
-                          <span>{achievement}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                    <h5 className="font-medium text-gray-700 dark:text-gray-300 mb-2">Technologies:</h5>
-                    <div className="flex flex-wrap gap-2">
-                      {exp.technologies.map((tech, i) => (
-                        <span key={i} className="skill-tag">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-      
+
       {/* Decorative elements */}
       <div className="absolute -z-10 top-1/2 -left-20 w-64 h-64 bg-primary-200/20 dark:bg-primary-900/10 rounded-full blur-3xl"></div>
     </section>

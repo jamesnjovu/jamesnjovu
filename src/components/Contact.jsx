@@ -1,6 +1,7 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane, FaCheckCircle, FaSpinner, FaExclamationTriangle } from 'react-icons/fa';
+import { gsap, useGSAP, MOTION, prefersReducedMotion } from '../utils/animations';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,9 @@ const Contact = () => {
   const [submitMessage, setSubmitMessage] = useState('');
   const [submitStatus, setSubmitStatus] = useState('');
   const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const infoPanelRef = useRef(null);
+  const formPanelRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -102,44 +106,48 @@ const Contact = () => {
     }
   ];
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fadeInUp');
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
+  // Two panels arrive from opposite sides, then the form fields cascade in.
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+      });
 
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
+      tl.from(headingRef.current, { opacity: 0, y: MOTION.distance })
+        .from(infoPanelRef.current, { opacity: 0, x: -40 }, '-=0.4')
+        .from(formPanelRef.current, { opacity: 0, x: 40 }, '<')
+        .from(
+          infoPanelRef.current.querySelectorAll('.contact-row'),
+          { opacity: 0, y: 16, stagger: 0.08, duration: MOTION.durationFast },
+          '-=0.4'
+        )
+        .from(
+          formPanelRef.current.querySelectorAll('.form-field'),
+          { opacity: 0, y: 16, stagger: 0.07, duration: MOTION.durationFast },
+          '-=0.5'
+        );
+    },
+    { scope: sectionRef }
+  );
 
   return (
-    <section id="contact" className="section-container relative">
-      <div ref={sectionRef} className="opacity-0">
-        <h2 className="section-title">Get In Touch</h2>
+    <section id="contact" className="section-container relative" ref={sectionRef}>
+      <div>
+        <h2 className="section-title" ref={headingRef}>Get In Touch</h2>
 
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 stagger-children">
-          <div className="animate-staggered">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+          <div ref={infoPanelRef}>
             <div className="bg-white dark:bg-dark-bg-secondary p-6 md:p-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
               <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Let's Connect</h3>
               <p className="text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
-                I'm interested in freelance opportunities – especially ambitious or large projects. However, if you have other requests or questions, don't hesitate to use the form to get in touch.
+                I'm open to senior engineering roles, consulting on Elixir/Phoenix systems, and collaboration on open source. If you have a project, a role, or a technical question, use the form and I'll get back to you.
               </p>
 
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-center gap-4 group hover-scale">
+                  <div key={index} className="contact-row flex items-center gap-4 group hover-scale">
                     <div className="w-14 h-14 bg-primary-100 dark:bg-primary-900/40 rounded-full flex items-center justify-center text-primary-600 dark:text-primary-400 group-hover:bg-primary-200 dark:group-hover:bg-primary-800/40 transition-colors">
                       {info.icon}
                     </div>
@@ -159,7 +167,7 @@ const Contact = () => {
               </div>
 
               {/* Social presence */}
-              <div className="mt-12">
+              <div className="contact-row mt-12">
                 <h4 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">Find me on</h4>
                 <div className="flex gap-4">
                   <a href="https://github.com/jamesnjovu" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-primary-900/30 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 hover:-translate-y-1">
@@ -168,20 +176,20 @@ const Contact = () => {
                   <a href="https://www.linkedin.com/in/james-njovu-0a71181b2/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-primary-900/30 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 hover:-translate-y-1">
                     <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 448 512" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"></path></svg>
                   </a>
-                  <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-primary-900/30 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 hover:-translate-y-1">
-                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg>
+                  <a href="https://hex.pm/users/jamesnjovu" target="_blank" rel="noopener noreferrer" aria-label="Hex.pm packages" className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-primary-100 dark:hover:bg-primary-900/30 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-300 hover:-translate-y-1">
+                    <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><path d="M256 24L48 136v240l208 112 208-112V136L256 24zm0 54.4l160 86.2v66.9l-160-86.2-160 86.2v-66.9l160-86.2zm-160 189l160 86.2 160-86.2v66.9l-160 86.2-160-86.2v-66.9z"></path></svg>
                   </a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="animate-staggered animate-staggered-delay-2">
+          <div ref={formPanelRef}>
             <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-bg-secondary p-6 md:p-8 rounded-lg shadow-md space-y-5">
-              <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Send a Message</h3>
+              <h3 className="form-field text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Send a Message</h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="col-span-1">
+                <div className="form-field col-span-1">
                   <label htmlFor="name" className="form-label">
                     Full Name
                   </label>
@@ -196,7 +204,7 @@ const Contact = () => {
                     className="input"
                   />
                 </div>
-                <div className="col-span-1">
+                <div className="form-field col-span-1">
                   <label htmlFor="email" className="form-label">
                     Email Address
                   </label>
@@ -213,7 +221,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div>
+              <div className="form-field">
                 <label htmlFor="subject" className="form-label">
                   Subject
                 </label>
@@ -229,7 +237,7 @@ const Contact = () => {
                 />
               </div>
 
-              <div>
+              <div className="form-field">
                 <label htmlFor="message" className="form-label">
                   Your Message
                 </label>
@@ -245,7 +253,7 @@ const Contact = () => {
                 ></textarea>
               </div>
 
-              <div>
+              <div className="form-field">
                 <button
                   type="submit"
                   disabled={isSubmitting}

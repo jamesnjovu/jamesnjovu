@@ -1,88 +1,126 @@
 <div align="center">
-  <img src="https://media.licdn.com/dms/image/C5603AQGkuDX4qZxOyg/profile-displayphoto-shrink_100_100/0/1647022729085?e=1692835200&amp;v=beta&amp;t=cormnEvwRGPTC3Y_8PTb9gDyWcqF9BVwSZz5j8oXbwU" width="120px" alt="James Njovu" style="border-radius: 50%;"/>
-  
+  <img src="src/assets/james-profile.jpg" width="140" alt="James Njovu" />
+
   # James Njovu
-  ## Senior Full Stack Software Engineer
-  
-  *Building scalable applications with modern technologies*
 
-  [![LinkedIn](https://img.shields.io/badge/LinkedIn-James%20Njovu-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/james-njovu-0a71181b2)
-  [![Email](https://img.shields.io/badge/Email-njovujames@gmail.com-D14836?style=for-the-badge&logo=gmail)](mailto:njovujames@gmail.com)
-  [![Hex.pm](https://img.shields.io/badge/Hex.pm-jamesnjovu-663399?style=for-the-badge&logo=elixir)](https://hex.pm/users/jamesnjovu)
-  [![Instagram](https://img.shields.io/badge/Instagram-jameslewiswayne-E4405F?style=for-the-badge&logo=instagram)](https://www.instagram.com/jameslewiswayne/)
+  **Senior Software Engineer** · Elixir / Phoenix · Distributed & Fintech Systems
+  📍 Lusaka, Zambia
+
+  Building reliable, high-throughput backend systems and the developer tools that make them easier to ship.
+
+  [![Portfolio](https://img.shields.io/badge/Portfolio-jamesnjovu.github.io-2563EB?style=for-the-badge&logo=googlechrome&logoColor=white)](https://jamesnjovu.github.io/jamesnjovu)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/james-njovu-0a71181b2)
+  [![Hex.pm](https://img.shields.io/badge/Hex.pm-Packages-663399?style=for-the-badge&logo=elixir&logoColor=white)](https://hex.pm/users/jamesnjovu)
+  [![Email](https://img.shields.io/badge/Email-njovujames%40gmail.com-24292F?style=for-the-badge&logo=gmail&logoColor=white)](mailto:njovujames@gmail.com)
+  [![Résumé](https://img.shields.io/badge/R%C3%A9sum%C3%A9-PDF-16A34A?style=for-the-badge&logo=readdotcv&logoColor=white)](https://jamesnjovu.github.io/jamesnjovu/resume.pdf)
 </div>
 
 ---
 
-## 🎯 Professional Summary
+## Profile
 
-Senior Software Developer with expertise in building robust, high-performance applications using modern web technologies. Specialized in Elixir/Phoenix ecosystem with strong full-stack capabilities and a passion for clean, maintainable code.
+Senior Software Engineer with 6+ years of professional experience designing and delivering mission-critical
+financial systems. I work primarily in the Elixir/Phoenix ecosystem, with full-stack range across JavaScript,
+React and relational databases. My focus is on well-factored APIs, measurable performance work, and libraries
+that other engineers can pick up and use without reading the source.
 
-**Current Focus:**
-- 🏢 Senior Software Developer at **Probase Limited**
-- 🎓 Information Systems Student at **University of Lusaka**
-- 🚀 Elixir package development and open-source contributions
-- 🧠 Advanced studies in Systems Design and Artificial Intelligence
+I also publish and maintain open-source packages on [Hex.pm](https://hex.pm/users/jamesnjovu) — mobile-money
+integrations, LiveView UI components and data tooling — and mentor junior engineers on code quality, review
+practice and delivery.
 
-## 🛠️ Technical Expertise
+---
 
-### Primary Technologies
-```
-Elixir • Phoenix • Phoenix LiveView • PostgreSQL • JavaScript • Python
-```
+## Experience
 
-### Backend Development
-![Elixir](https://img.shields.io/badge/-Elixir-4B275F?style=flat-square&logo=elixir&logoColor=white)
-![Phoenix](https://img.shields.io/badge/-Phoenix-FD4F00?style=flat-square&logo=phoenix&logoColor=white)
-![Phoenix LiveView](https://img.shields.io/badge/-Phoenix_LiveView-FD4F00?style=flat-square&logo=phoenix&logoColor=white)
-![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
-![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+### Senior Software Engineer — Probase Limited Zambia
+`August 2020 – Present` · Lusaka, Zambia
 
-### Frontend Development
-![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![React](https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=react&logoColor=black)
-![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/-CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/-Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/-Bootstrap-7952B3?style=flat-square&logo=bootstrap&logoColor=white)
+Lead development on mission-critical financial systems; own API design, code review and CI/CD practice,
+and mentor junior engineers.
 
-### Database & Infrastructure
-![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)
-![MySQL](https://img.shields.io/badge/-MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
-![MS SQL](https://img.shields.io/badge/-MS_SQL-CC2927?style=flat-square&logo=microsoft-sql-server&logoColor=white)
-![Oracle](https://img.shields.io/badge/-Oracle-F80000?style=flat-square&logo=oracle&logoColor=white)
+- Designed and shipped RESTful APIs with 10+ endpoints, improving mobile-app query flexibility by **40%**
+- Authored an Elixir dependency for MNO integration, cutting integration code complexity by **30%** and
+  increasing delivery speed by **20%**
+- Optimised database access paths for a **50%** improvement in application response time
+- Mentored **3** junior developers now shipping independently
+- Established code review standards and CI/CD pipelines across team projects
 
-### Development Tools
-![Git](https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white)
-![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&logoColor=white)
-![VS Code](https://img.shields.io/badge/-VS_Code-007ACC?style=flat-square&logo=visual-studio-code&logoColor=white)
-![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ_IDEA-000000?style=flat-square&logo=intellij-idea&logoColor=white)
+`Elixir` `Phoenix` `JavaScript` `SQL` `REST APIs` `Docker`
 
-## 📈 GitHub Analytics
+### Software Developer — Freelance
+`September 2019 – July 2020`
+
+Delivered full-stack web and mobile solutions end to end: requirements, schema design, build, handover docs
+and ongoing support.
+
+- Built a secure e-banking mobile application with biometric authentication (Java, XML, PHP)
+- Designed a normalised SQL schema of **20+** tables for an admin portal
+- **100%** on-time delivery across all client engagements
+
+`PHP` `JavaScript` `Java` `MySQL` `HTML5` `CSS3`
+
+---
+
+## Open Source
+
+Published Elixir packages, used in production and available on Hex.pm.
+
+| Project | What it does | Stack | Links |
+| --- | --- | --- | --- |
+| **Pine UI** | 15+ interactive UI components for Phoenix — animated text, cards, form elements, loading buttons, tooltips, badges | Elixir · Phoenix · TailwindCSS · AlpineJS | [Repo](https://github.com/jamesnjovu/pine_ui_phoenix) · [Hex](https://hex.pm/packages/pine_ui_phoenix) |
+| **ex_mtn_momo** | MTN Mobile Money API client — collections, disbursements and remittances with robust error handling | Elixir · Payments | [Repo](https://github.com/jamesnjovu/ex_mtn_momo) |
+| **ex_mpesa** | Vodacom M-Pesa OpenAPI client — session management, C2B/B2C/B2B, transaction status, direct debit | Elixir · Payments | [Repo](https://github.com/jamesnjovu/ex_mpesa) · [Hex](https://hex.pm/packages/elixir_mpesa) |
+| **ex_live_table** | Interactive LiveView data table — sorting, pagination, search and custom formatting with minimal config | Elixir · Phoenix LiveView | [Repo](https://github.com/jamesnjovu/ex_live_table) |
+| **number_f** | Numeric formatting and conversion utilities — number-to-words, currency formatting, math helpers | Elixir | [Repo](https://github.com/jamesnjovu/elixir_number_functions) · [Hex](https://hex.pm/packages/number_f) |
+| **USSD Emulator** | React app that simulates USSD session flows against a backend API — test without a handset | React · Vite | [Repo](https://github.com/jamesnjovu/ussd-emulator) · [Live](https://jamesnjovu.github.io/ussd-emulator/) |
+
+---
+
+## Technical Skills
+
+**Languages** — Elixir · JavaScript (ES6+) · SQL · Java · PHP · HTML5/CSS3
+
+**Backend & Frameworks** — Phoenix · Phoenix LiveView · Node.js · RESTful API design
+
+**Frontend** — React · TailwindCSS · Bootstrap · Vite
+
+**Data** — PostgreSQL · MySQL · MS SQL Server · Oracle
+
+**Practice** — Docker · Git · CI/CD · code review · system documentation · technical mentoring
+
+---
+
+## Education & Certification
+
+- **Secondary Teachers Diploma, Computer Science** — Evelyn Hone College of Applied Arts and Commerce, 2017–2019
+- **CCNA Routing and Switching: Introduction to Networks** — Cisco Networking Academy, November 2019
+- **IT Essentials** — Cisco Networking Academy, August 2019
+
+---
+
+## Activity
 
 <div align="center">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=jamesnjovu&theme=tokyonight&show_icons=true&hide_border=true&count_private=true" />
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=jamesnjovu&theme=tokyonight&layout=compact&hide_border=true" />
+  <img height="165em" src="https://github-readme-stats.vercel.app/api?username=jamesnjovu&theme=tokyonight&show_icons=true&hide_border=true&count_private=true" alt="GitHub stats" />
+  <img height="165em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=jamesnjovu&theme=tokyonight&layout=compact&hide_border=true" alt="Top languages" />
 </div>
 
-<div align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=jamesnjovu&theme=tokyonight&hide_border=true" />
-</div>
+<!-- START GITLAB STATS -->
+<!-- END GITLAB STATS -->
 
-## 🚀 Open Source Contributions
+---
 
-Actively contributing to the Elixir ecosystem through package development and community engagement. Check out my published packages on [Hex.pm](https://hex.pm/users/jamesnjovu).
+## Contact
 
-## 🤝 Let's Connect
+Open to senior engineering roles, consulting on Elixir/Phoenix systems, and collaboration on open source.
 
-I'm always interested in discussing new opportunities, collaborating on interesting projects, or sharing knowledge about software development. Feel free to reach out!
-
-- 💼 **Professional inquiries:** [njovujames@gmail.com](mailto:njovujames@gmail.com)
-- 🔗 **LinkedIn:** [James Njovu](https://www.linkedin.com/in/james-njovu-0a71181b2)
-- 📦 **Elixir Packages:** [Hex.pm Profile](https://hex.pm/users/jamesnjovu)
+- **Email** — [njovujames@gmail.com](mailto:njovujames@gmail.com)
+- **LinkedIn** — [james-njovu](https://www.linkedin.com/in/james-njovu-0a71181b2)
+- **Portfolio** — [jamesnjovu.github.io/jamesnjovu](https://jamesnjovu.github.io/jamesnjovu)
+- **Packages** — [hex.pm/users/jamesnjovu](https://hex.pm/users/jamesnjovu)
 
 ---
 
 <div align="center">
-  <i>💡 "Clean code always looks like it was written by someone who cares."</i>
+  <sub>This repository is the source for my portfolio site — React 19 · Vite · TailwindCSS, deployed to GitHub Pages.</sub>
 </div>

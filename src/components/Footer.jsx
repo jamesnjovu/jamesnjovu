@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaHeart, FaArrowUp, FaEnvelope, FaPhoneAlt, FaSun, FaMoon, FaDesktop } from 'react-icons/fa';
+import { useState, useEffect, useRef } from 'react';
+import { FaGithub, FaLinkedin, FaCubes, FaHeart, FaArrowUp, FaEnvelope, FaPhoneAlt, FaSun, FaMoon, FaDesktop } from 'react-icons/fa';
 import { Link as ScrollLink } from 'react-scroll';
+import { gsap, ScrollTrigger, useGSAP, MOTION, prefersReducedMotion } from '../utils/animations';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [theme, setTheme] = useState('system');
   const [showThemeOptions, setShowThemeOptions] = useState(false);
+  const footerRef = useRef(null);
+  const scrollTopRef = useRef(null);
   
   // Initialize theme on mount
   useEffect(() => {
@@ -38,24 +41,54 @@ const Footer = () => {
       url: 'https://linkedin.com/in/james-njovu-0a71181b2/' 
     },
     { 
-      icon: <FaTwitter />, 
-      label: 'Twitter',
-      url: 'https://twitter.com/' 
+      icon: <FaCubes />, 
+      label: 'Hex.pm',
+      url: 'https://hex.pm/users/jamesnjovu' 
     }
   ];
 
-  // Check if we should show the scroll to top button
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const showThreshold = 500; // Show after scrolling 500px
-      
-      setShowScrollTop(scrollY > showThreshold);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // Footer columns reveal on scroll; the back-to-top button pops in past 500px.
+  useGSAP(
+    () => {
+      ScrollTrigger.create({
+        start: 'top -500',
+        end: 99999,
+        onToggle: (self) => setShowScrollTop(self.isActive),
+      });
+
+      if (prefersReducedMotion()) return;
+
+      gsap.from('.footer-col', {
+        opacity: 0,
+        y: MOTION.distance,
+        stagger: 0.12,
+        scrollTrigger: { trigger: footerRef.current, start: 'top 90%', once: true },
+      });
+
+      gsap.from('.footer-bottom', {
+        opacity: 0,
+        y: 16,
+        scrollTrigger: { trigger: footerRef.current, start: 'top 70%', once: true },
+      });
+    },
+    { scope: footerRef }
+  );
+
+  // The back-to-top button scales in and out rather than just fading.
+  useGSAP(
+    () => {
+      if (!scrollTopRef.current) return;
+
+      gsap.to(scrollTopRef.current, {
+        autoAlpha: showScrollTop ? 1 : 0,
+        scale: showScrollTop ? 1 : 0.6,
+        y: showScrollTop ? 0 : 16,
+        duration: prefersReducedMotion() ? 0 : MOTION.durationFast,
+        ease: showScrollTop ? 'back.out(1.8)' : MOTION.easeInOut,
+      });
+    },
+    { scope: footerRef, dependencies: [showScrollTop] }
+  );
   
   // Scroll to top function
   const scrollToTop = () => {
@@ -113,7 +146,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative bg-gray-100 dark:bg-gray-900 pt-16 pb-8 overflow-hidden">
+    <footer className="relative bg-gray-100 dark:bg-gray-900 pt-16 pb-8 overflow-hidden" ref={footerRef}>
       {/* Always visible Theme Toggle FAB */}
       <div className="fixed right-6 bottom-24 z-50 transition-all duration-300">
         {/* Theme options popup */}
@@ -162,9 +195,10 @@ const Footer = () => {
       </div>
       
       {/* Conditional Scroll to Top FAB */}
-      <div className={`fixed right-6 bottom-6 z-50 transition-all duration-300 ${
-        showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'
-      }`}>
+      <div
+        ref={scrollTopRef}
+        className={`fixed right-6 bottom-6 z-50 invisible opacity-0 ${showScrollTop ? '' : 'pointer-events-none'}`}
+      >
         {/* Scroll to top button */}
         <button 
           onClick={scrollToTop}
@@ -186,10 +220,10 @@ const Footer = () => {
         {/* Main footer content */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Info column */}
-          <div className="animate-staggered">
+          <div className="footer-col">
             <h2 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">James Njovu</h2>
             <p className="text-gray-600 dark:text-gray-400 mt-3 max-w-sm">
-              Full Stack Software Engineer with a passion for building elegant, user-friendly solutions to complex problems.
+              Senior Software Engineer specialising in Elixir/Phoenix — backend systems, fintech integrations and open-source developer tooling.
             </p>
             
             {/* Quick contact */}
@@ -220,7 +254,7 @@ const Footer = () => {
           </div>
           
           {/* Site map */}
-          <div className="animate-staggered animate-staggered-delay-1">
+          <div className="footer-col">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Site Map</h3>
             <nav className="grid grid-cols-2 gap-2">
               {menuItems.map((item) => (
@@ -240,7 +274,7 @@ const Footer = () => {
           </div>
           
           {/* Newsletter/Contact CTA */}
-          <div className="animate-staggered animate-staggered-delay-2">
+          <div className="footer-col">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Get In Touch</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               Interested in working together? Let's discuss your project!
@@ -271,7 +305,7 @@ const Footer = () => {
         </div>
         
         {/* Copyright */}
-        <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="footer-bottom border-t border-gray-200 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 md:mb-0">
             &copy; {currentYear} James Njovu. All rights reserved.
           </p>

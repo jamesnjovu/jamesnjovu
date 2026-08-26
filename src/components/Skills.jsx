@@ -1,88 +1,57 @@
-
-
-
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { FaCode, FaPeopleCarry, FaLanguage, FaStar } from 'react-icons/fa';
+import { gsap, useGSAP, MOTION, prefersReducedMotion } from '../utils/animations';
 
 const Skills = () => {
   const [activeTab, setActiveTab] = useState('technical');
   const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const panelRef = useRef(null);
 
-  // Enhanced skill data with proficiency levels
+  // Each technical skill carries its own category, so a skill can never fall out
+  // of the UI because a category list and the data drifted apart.
   const skills = {
     technical: [
-      { name: 'Elixir', level: 95 },
-      { name: 'JavaScript ES6', level: 85 },
-      { name: 'SQL', level: 80 },
-      { name: 'HTML5', level: 90 },
-      { name: 'CSS3', level: 85 },
-      { name: 'JAVA', level: 75 },
-      { name: 'Phoenix', level: 85 },
-      { name: 'ReactJS', level: 80 },
-      { name: 'Node.js', level: 75 },
-      { name: 'Docker', level: 70 },
-      { name: 'MsSQL', level: 75 },
-      { name: 'Postgres', level: 80 },
-      { name: 'Oracle', level: 70 },
-      { name: 'RESTful API', level: 90 },
-      { name: 'PHP', level: 75 },
-      { name: 'MySQL', level: 85 },
+      { name: 'Elixir', level: 95, category: 'Backend' },
+      { name: 'Phoenix', level: 85, category: 'Backend' },
+      { name: 'Node.js', level: 75, category: 'Backend' },
+      { name: 'PHP', level: 75, category: 'Backend' },
+      { name: 'JAVA', level: 75, category: 'Backend' },
+      { name: 'Phoenix LiveView', level: 85, category: 'Frontend' },
+      { name: 'JavaScript ES6', level: 85, category: 'Frontend' },
+      { name: 'ReactJS', level: 80, category: 'Frontend' },
+      { name: 'HTML5', level: 90, category: 'Frontend' },
+      { name: 'CSS3', level: 85, category: 'Frontend' },
+      { name: 'SQL', level: 80, category: 'Database' },
+      { name: 'PostgreSQL', level: 80, category: 'Database' },
+      { name: 'MySQL', level: 85, category: 'Database' },
+      { name: 'MsSQL', level: 75, category: 'Database' },
+      { name: 'Oracle', level: 70, category: 'Database' },
+      { name: 'RESTful API', level: 90, category: 'DevOps & Tools' },
+      { name: 'Docker', level: 70, category: 'DevOps & Tools' },
+      { name: 'Git & CI/CD', level: 85, category: 'DevOps & Tools' },
     ],
     soft: [
-      { name: 'Leadership', level: 85 },
-      { name: 'Mentoring', level: 90 },
       { name: 'Problem Solving', level: 95 },
-      { name: 'Mathematical Skills', level: 85 },
-      { name: 'Communication', level: 80 },
+      { name: 'Mentoring', level: 90 },
       { name: 'Team Collaboration', level: 90 },
+      { name: 'Adaptability', level: 90 },
+      { name: 'Leadership', level: 85 },
+      { name: 'Mathematical Skills', level: 85 },
       { name: 'Time Management', level: 85 },
-      { name: 'Adaptability', level: 90 }
+      { name: 'Communication', level: 80 },
     ],
     languages: [
       { name: 'English', level: 95, description: 'Fluent' },
       { name: 'Nyanja', level: 90, description: 'Fluent' },
       { name: 'Bemba', level: 75, description: 'Fluent' },
-    ]
+    ],
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate-fadeInUp');
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
+  const categoryOrder = ['Backend', 'Frontend', 'Database', 'DevOps & Tools'];
+  const getSkillsByCategory = (category) =>
+    skills.technical.filter((skill) => skill.category === category);
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
-  // Group technical skills by category for better organization
-  const technicalCategories = {
-    'Frontend': ['HTML5', 'CSS3', 'JavaScript ES6', 'ReactJS', 'Phoenix Live View'],
-    'Backend': ['Elixir', 'Node.js', 'PHP', 'JAVA'],
-    'Database': ['SQL', 'MySQL', 'PostgresSQL', 'MsSQL', 'Oracle'],
-    'DevOps & Tools': ['Docker', 'RESTful API']
-  };
-
-  // Filter technical skills by category
-  const getSkillsByCategory = (category) => {
-    return skills.technical.filter(skill =>
-      technicalCategories[category].includes(skill.name)
-    );
-  };
-
-  // Get tab icon
   const getTabIcon = (tab) => {
     switch (tab) {
       case 'technical':
@@ -96,19 +65,72 @@ const Skills = () => {
     }
   };
 
-  return (
-    <section id="skills" className="section-container relative">
-      <div ref={sectionRef} className="opacity-0">
-        <h2 className="section-title">My Skills</h2>
+  // Section heading + tab bar reveal, once, on scroll.
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
 
-        <div className="mb-8 flex flex-wrap border-b border-gray-200 dark:border-gray-700">
+      gsap.from(headingRef.current, {
+        opacity: 0,
+        y: MOTION.distance,
+        scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+      });
+
+      gsap.from('.skills-tab', {
+        opacity: 0,
+        y: 16,
+        stagger: MOTION.stagger,
+        scrollTrigger: { trigger: sectionRef.current, start: MOTION.start, once: true },
+      });
+    },
+    { scope: sectionRef }
+  );
+
+  // Panel content animates on first view AND on every tab change, so switching
+  // tabs feels like a deliberate transition rather than a hard swap.
+  useGSAP(
+    () => {
+      const bars = gsap.utils.toArray('.skill-bar');
+
+      if (prefersReducedMotion()) {
+        gsap.set(bars, { scaleX: 1 });
+        return;
+      }
+
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: panelRef.current, start: 'top 90%', once: true },
+      });
+
+      tl.from('.skill-group', { opacity: 0, y: 24, stagger: 0.1, duration: MOTION.durationFast })
+        .from('.skill-card', { opacity: 0, y: 18, stagger: 0.03, duration: MOTION.durationFast }, '-=0.3')
+        .fromTo(
+          bars,
+          { scaleX: 0 },
+          { scaleX: 1, duration: 1, ease: 'power2.out', stagger: 0.04 },
+          '-=0.25'
+        );
+    },
+    { scope: panelRef, dependencies: [activeTab], revertOnUpdate: true }
+  );
+
+  return (
+    <section id="skills" className="section-container relative" ref={sectionRef}>
+      <div>
+        <h2 className="section-title" ref={headingRef}>
+          My Skills
+        </h2>
+
+        <div className="mb-8 flex flex-wrap border-b border-gray-200 dark:border-gray-700" role="tablist">
           {['technical', 'soft', 'languages'].map((tab) => (
             <button
               key={tab}
-              className={`py-3 px-5 font-medium flex items-center gap-2 transition-all duration-300 ${activeTab === tab
-                ? 'border-b-2 border-primary-600 text-primary-600 dark:text-primary-400'
-                : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'
-                }`}
+              role="tab"
+              aria-selected={activeTab === tab}
+              className={`skills-tab py-3 px-5 font-medium flex items-center gap-2 transition-all duration-300 ${
+                activeTab === tab
+                  ? 'border-b-2 border-primary-600 text-primary-600 dark:text-primary-400'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400'
+              }`}
               onClick={() => setActiveTab(tab)}
             >
               {getTabIcon(tab)}
@@ -117,11 +139,11 @@ const Skills = () => {
           ))}
         </div>
 
-        <div className="animate-staggered">
+        <div ref={panelRef}>
           {activeTab === 'technical' && (
             <div className="space-y-10">
-              {Object.keys(technicalCategories).map((category, idx) => (
-                <div key={category} className={`animate-staggered animate-staggered-delay-${idx + 1}`}>
+              {categoryOrder.map((category, idx) => (
+                <div key={category} className="skill-group">
                   <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200 flex items-center">
                     <span className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400 mr-2">
                       {idx + 1}
@@ -131,19 +153,18 @@ const Skills = () => {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {getSkillsByCategory(category).map((skill) => (
-                      <div key={skill.name} className="bg-white dark:bg-dark-bg-secondary p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
+                      <div
+                        key={skill.name}
+                        className="skill-card bg-white dark:bg-dark-bg-secondary p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+                      >
                         <div className="flex justify-between items-center mb-2">
                           <span className="font-medium text-gray-800 dark:text-gray-200">{skill.name}</span>
                           <span className="text-sm text-gray-600 dark:text-gray-400">{skill.level}%</span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                           <div
-                            className="bg-gradient-primary h-2 rounded-full"
-                            style={{
-                              width: `${skill.level}%`,
-                              animation: `progressAnimation 1s ease-out forwards`,
-                              transformOrigin: 'left'
-                            }}
+                            className="skill-bar bg-gradient-primary h-2 rounded-full origin-left"
+                            style={{ width: `${skill.level}%` }}
                           ></div>
                         </div>
                       </div>
@@ -156,10 +177,10 @@ const Skills = () => {
 
           {activeTab === 'soft' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {skills.soft.map((skill, index) => (
+              {skills.soft.map((skill) => (
                 <div
                   key={skill.name}
-                  className="bg-white dark:bg-dark-bg-secondary rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center hover:-translate-y-1"
+                  className="skill-card bg-white dark:bg-dark-bg-secondary rounded-lg p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center hover:-translate-y-1"
                 >
                   <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400 mb-4">
                     <div className="relative">
@@ -172,12 +193,8 @@ const Skills = () => {
                   <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">{skill.name}</h3>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
                     <div
-                      className="bg-gradient-primary h-2 rounded-full"
-                      style={{
-                        width: `${skill.level}%`,
-                        animation: `progressAnimation 1s ease-out forwards`,
-                        transformOrigin: 'left'
-                      }}
+                      className="skill-bar bg-gradient-primary h-2 rounded-full origin-left"
+                      style={{ width: `${skill.level}%` }}
                     ></div>
                   </div>
                 </div>
@@ -188,7 +205,7 @@ const Skills = () => {
           {activeTab === 'languages' && (
             <div className="max-w-2xl mx-auto">
               {skills.languages.map((language) => (
-                <div key={language.name} className="mb-6">
+                <div key={language.name} className="skill-card mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <div>
                       <span className="font-medium text-lg text-gray-800 dark:text-gray-200">
@@ -202,12 +219,8 @@ const Skills = () => {
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                     <div
-                      className="bg-gradient-primary h-3 rounded-full relative"
-                      style={{
-                        width: `${language.level}%`,
-                        animation: `progressAnimation 1s ease-out forwards`,
-                        transformOrigin: 'left'
-                      }}
+                      className="skill-bar bg-gradient-primary h-3 rounded-full relative origin-left"
+                      style={{ width: `${language.level}%` }}
                     >
                       {language.level >= 90 && (
                         <div className="absolute right-1 top-1/2 transform -translate-y-1/2 font-medium text-xs text-white">
@@ -219,7 +232,7 @@ const Skills = () => {
                 </div>
               ))}
 
-              <div className="mt-8 bg-primary-50 dark:bg-primary-900/10 p-4 rounded-lg">
+              <div className="skill-group mt-8 bg-primary-50 dark:bg-primary-900/10 p-4 rounded-lg">
                 <h3 className="font-medium text-gray-800 dark:text-gray-200 mb-2 flex items-center">
                   <FaLanguage className="mr-2 text-primary-600 dark:text-primary-400" />
                   Language Proficiency Scale
@@ -250,20 +263,6 @@ const Skills = () => {
 
       {/* Decorative elements */}
       <div className="absolute -z-10 bottom-10 -left-20 w-64 h-64 bg-primary-200/20 dark:bg-primary-900/10 rounded-full blur-3xl"></div>
-
-      {/* Use a regular style element instead of style jsx */}
-      <style>
-        {`
-          @keyframes progressAnimation {
-            0% {
-              transform: scaleX(0);
-            }
-            100% {
-              transform: scaleX(1);
-            }
-          }
-        `}
-      </style>
     </section>
   );
 };

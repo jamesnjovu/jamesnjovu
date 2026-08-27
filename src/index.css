@@ -271,6 +271,130 @@
     border-color: #d1343f;
   }
 
+  /* ---- Hero flow diagram ------------------------------------------- */
+
+  .flow-panel {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-subtle);
+    overflow: hidden;
+  }
+
+  .flow-live {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-subtle);
+  }
+
+  /*
+   * --flow-on is tweened by GSAP from 0 to 1, so a single custom property
+   * drives border, colour and background together as a stage activates.
+   */
+  .flow-node {
+    --flow-on: 0;
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--accent) calc(var(--flow-on) * 100%), var(--border));
+    background: color-mix(in srgb, var(--accent-subtle) calc(var(--flow-on) * 100%), transparent);
+    color: color-mix(in srgb, var(--accent) calc(var(--flow-on) * 100%), var(--text-muted));
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .flow-node[data-settled='true'] {
+    --flow-on: 1;
+  }
+
+  /* A radar-style ring, not a fill — it must never sit on top of the label. */
+  .flow-pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    border: 1px solid var(--accent);
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Connector: a track, a fill that grows, and a packet that travels it. */
+  .flow-link {
+    position: relative;
+    flex-shrink: 0;
+    align-self: center;
+    width: 2px;
+    height: 1.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .flow-link {
+      width: 1.75rem;
+      height: 2px;
+      min-width: 1rem;
+      flex: 0 1 1.75rem;
+    }
+  }
+
+  .flow-track,
+  .flow-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+  }
+
+  .flow-track {
+    background: var(--border-strong);
+  }
+
+  .flow-fill {
+    background: var(--accent);
+    transform: scaleY(0);
+  }
+
+  @media (min-width: 640px) {
+    .flow-fill {
+      transform: scaleX(0);
+    }
+  }
+
+  .flow-dot {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    margin-top: -1.5px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0;
+  }
+
+  @media (min-width: 640px) {
+    .flow-dot {
+      left: 0;
+      top: 50%;
+      margin-left: -1.5px;
+      margin-top: -2.5px;
+    }
+  }
+
+  /* A downward-drifting tick under the scroll cue. */
+  .scroll-cue {
+    width: 1px;
+    height: 1.75rem;
+    background: linear-gradient(to bottom, var(--border-strong), transparent);
+  }
+
   /* ---- Scrollbar --------------------------------------------------- */
 
   ::-webkit-scrollbar {

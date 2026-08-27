@@ -481,6 +481,27 @@
     }
   }
 
+  /* The packet travels the whole diagram on a MotionPath, so it is positioned
+     against the track rather than inside any one connector. */
+  .flow-track-area {
+    position: relative;
+  }
+
+  .flow-packet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
+    z-index: 1;
+  }
+
   .flow-dot {
     position: absolute;
     left: 50%;
@@ -495,7 +516,28 @@
   }
 
   @media (min-width: 640px) {
-    .flow-dot {
+    /* The packet travels the whole diagram on a MotionPath, so it is positioned
+     against the track rather than inside any one connector. */
+  .flow-track-area {
+    position: relative;
+  }
+
+  .flow-packet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
+    z-index: 1;
+  }
+
+  .flow-dot {
       left: 0;
       top: 50%;
       margin-left: -1.5px;

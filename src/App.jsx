@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import Backdrop from './components/Backdrop';
 import SiteHeader from './components/SiteHeader';
 import Hero from './components/Hero';
 import Work from './components/Work';
@@ -44,6 +45,8 @@ function App() {
       >
         Skip to content
       </a>
+
+      <Backdrop />
 
       <SiteHeader theme={resolved} onToggleTheme={toggleTheme} />
 

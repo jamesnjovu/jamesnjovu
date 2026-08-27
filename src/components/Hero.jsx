@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { FaGithub, FaLinkedin, FaArrowRight } from 'react-icons/fa';
-import { gsap, useGSAP, MOTION, prefersReducedMotion } from '../utils/animations';
-import { profile } from '../content';
+import { gsap, useGSAP, MOTION, revealHeading, prefersReducedMotion } from '../utils/animations';
+import { profile, builtWith } from '../content';
+import PaymentFlow from './PaymentFlow';
 import Portrait from '../assets/james-profile.jpg';
 
 const HexIcon = (props) => (
@@ -11,31 +12,67 @@ const HexIcon = (props) => (
 );
 
 const Hero = () => {
-  const ref = useRef(null);
+  const root = useRef(null);
+  const nameRef = useRef(null);
+  const ctaRef = useRef(null);
   const years = new Date().getFullYear() - profile.startYear;
 
   useGSAP(
     () => {
       if (prefersReducedMotion()) return;
 
-      gsap.fromTo(
-        '.hero-item',
-        { opacity: 0, y: 12 },
-        { opacity: 1, y: 0, duration: MOTION.duration, stagger: 0.07, ease: MOTION.ease }
-      );
+      const headline = revealHeading(nameRef.current, { delay: 0.1 });
+
+      gsap
+        .timeline({ defaults: { ease: MOTION.ease } })
+        .fromTo('.hero-eyebrow', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 })
+        .fromTo(
+          '.hero-item',
+          { opacity: 0, y: 12 },
+          { opacity: 1, y: 0, duration: 0.55, stagger: 0.08 },
+          0.45
+        );
+
+      // The CTA leans toward the pointer, then springs back on exit.
+      const cta = ctaRef.current;
+      if (cta && window.matchMedia('(hover: hover)').matches) {
+        const xTo = gsap.quickTo(cta, 'x', { duration: 0.4, ease: 'power3' });
+        const yTo = gsap.quickTo(cta, 'y', { duration: 0.4, ease: 'power3' });
+
+        const onMove = (e) => {
+          const r = cta.getBoundingClientRect();
+          xTo((e.clientX - (r.left + r.width / 2)) * 0.25);
+          yTo((e.clientY - (r.top + r.height / 2)) * 0.35);
+        };
+        const onLeave = () => {
+          gsap.to(cta, { x: 0, y: 0, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+        };
+
+        cta.addEventListener('mousemove', onMove);
+        cta.addEventListener('mouseleave', onLeave);
+        return () => {
+          cta.removeEventListener('mousemove', onMove);
+          cta.removeEventListener('mouseleave', onLeave);
+          headline?.revertSplit?.();
+        };
+      }
+
+      return () => headline?.revertSplit?.();
     },
-    { scope: ref }
+    { scope: root }
   );
 
   return (
-    <section id="top" ref={ref} className="pb-20 pt-32 sm:pt-36">
+    <section id="top" ref={root} className="pb-20 pt-32 sm:pt-36">
       <div className="shell">
         <div className="flex items-start justify-between gap-8">
           <div className="min-w-0">
-            <p className="eyebrow hero-item">
+            <p className="eyebrow hero-eyebrow">
               {profile.role} · {profile.location}
             </p>
-            <h1 className="hero-item mt-3 text-3xl sm:text-4xl">{profile.name}</h1>
+            <h1 ref={nameRef} className="mt-3 text-3xl sm:text-4xl">
+              {profile.name}
+            </h1>
           </div>
 
           <img
@@ -43,7 +80,7 @@ const Hero = () => {
             alt=""
             width="72"
             height="72"
-            className="hero-item hidden h-18 w-18 shrink-0 rounded-full border border-line object-cover sm:block"
+            className="hero-item hidden shrink-0 rounded-full border border-line object-cover sm:block"
             style={{ height: '72px', width: '72px' }}
           />
         </div>
@@ -66,7 +103,7 @@ const Hero = () => {
         </dl>
 
         <div className="hero-item mt-9 flex flex-wrap items-center gap-3">
-          <a href="#contact" className="btn btn-primary">
+          <a ref={ctaRef} href="#contact" className="btn btn-primary">
             Get in touch
             <FaArrowRight size={12} aria-hidden="true" />
           </a>
@@ -86,6 +123,24 @@ const Hero = () => {
             </a>
           </div>
         </div>
+
+        <div className="hero-item">
+          <PaymentFlow />
+        </div>
+
+        <p className="hero-item mt-4 text-xs text-ink-subtle">
+          This page is the demo: {builtWith.join(', ')} — the diagram above is a GSAP timeline built with{' '}
+          <code className="mono">matchMedia</code>, ScrollTrigger and animated custom properties.{' '}
+          <a
+            href="https://github.com/jamesnjovu/jamesnjovu"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link-accent"
+          >
+            Read the source
+          </a>
+          .
+        </p>
       </div>
     </section>
   );

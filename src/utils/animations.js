@@ -1,8 +1,9 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
 
 /**
  * Motion tokens. Deliberately restrained: short distances, quick durations,
@@ -59,4 +60,29 @@ export const reveal = (targets, options = {}) => {
   );
 };
 
-export { gsap, ScrollTrigger, useGSAP };
+/**
+ * Line-by-line masked reveal for a heading. The lines are clipped by their own
+ * wrapper, so each one rises out of a hard edge rather than fading in place.
+ *
+ * Returns a revert() the caller must run on cleanup — SplitText rewrites the
+ * element's DOM, and React needs it handed back intact.
+ */
+export const revealHeading = (element, options = {}) => {
+  const { stagger = 0.08, delay = 0, duration = 0.9 } = options;
+  if (!element) return null;
+
+  if (prefersReducedMotion()) return null;
+
+  const split = new SplitText(element, { type: 'lines', mask: 'lines' });
+
+  const tween = gsap.fromTo(
+    split.lines,
+    { yPercent: 105 },
+    { yPercent: 0, duration, delay, stagger, ease: 'expo.out' }
+  );
+
+  tween.revertSplit = () => split.revert();
+  return tween;
+};
+
+export { gsap, ScrollTrigger, SplitText, useGSAP };

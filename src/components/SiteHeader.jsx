@@ -109,7 +109,9 @@ const SiteHeader = ({ theme, onToggleTheme }) => {
       <div
         id="mobile-nav"
         ref={menuRef}
-        className={`invisible border-t border-line bg-bg opacity-0 md:hidden ${menuOpen ? '' : 'pointer-events-none'}`}
+        className={`invisible absolute inset-x-0 top-full border-t border-line bg-bg opacity-0 md:hidden ${
+          menuOpen ? '' : 'pointer-events-none'
+        }`}
       >
         <nav aria-label="Sections" className="shell flex flex-col py-2">
           {sections.map((s) => (

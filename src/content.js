@@ -164,6 +164,19 @@ export const education = [
 
 export const languages = ['English', 'Nyanja', 'Bemba'];
 
+/*
+ * The hero diagram. These are the real stages a mobile-money collection moves
+ * through — the same flow ex_mtn_momo and ex_mpesa implement.
+ */
+export const paymentFlow = [
+  { key: 'app', label: 'Mobile app', caption: 'Collection requested — K250.00' },
+  { key: 'api', label: 'Phoenix API', caption: 'Request validated, idempotency key issued' },
+  { key: 'momo', label: 'MoMo gateway', caption: 'Awaiting subscriber authorisation' },
+  { key: 'ledger', label: 'Ledger', caption: 'Callback received — payment settled' },
+];
+
+export const builtWith = ['React', 'Vite', 'Tailwind CSS', 'GSAP'];
+
 export const sections = [
   { id: 'work', label: 'Work' },
   { id: 'projects', label: 'Open Source' },

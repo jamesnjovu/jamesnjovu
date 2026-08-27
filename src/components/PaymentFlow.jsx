@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from '../utils/animations';
+import { gsap, ScrollTrigger, MotionPathPlugin, useGSAP, prefersReducedMotion } from '../utils/animations';
 import { paymentFlow } from '../content';
 
 /**
@@ -40,11 +40,39 @@ const PaymentFlow = ({ pinSelector }) => {
       const buildStages = (tl, axis) => {
         const nodes = gsap.utils.toArray('.flow-node');
         const fills = gsap.utils.toArray('.flow-fill');
-        const dots = gsap.utils.toArray('.flow-dot');
-        const travel = axis === 'x' ? { xPercent: 100 } : { yPercent: 100 };
-        const rest = axis === 'x' ? { xPercent: 0 } : { yPercent: 0 };
+        const packet = root.current.querySelector('.flow-packet');
+        const track = root.current.querySelector('.flow-track-area');
 
         gsap.set(fills, { transformOrigin: axis === 'x' ? 'left center' : 'center top' });
+
+        // MotionPath waypoints: each stage's centre, measured in the track's own
+        // coordinate space, with a control point lifted off the straight line so
+        // the packet arcs between stages instead of sliding along the connector.
+        // Measured rather than hard-coded, so it follows the row/column layout
+        // and any reflow ScrollTrigger refreshes through.
+        const waypoints = () => {
+          const base = track.getBoundingClientRect();
+          return nodes.map((node) => {
+            const r = node.getBoundingClientRect();
+            return {
+              x: r.left - base.left + r.width / 2 - packet.offsetWidth / 2,
+              y: r.top - base.top + r.height / 2 - packet.offsetHeight / 2,
+            };
+          });
+        };
+
+        const hop = (from, to) => {
+          const lift = axis === 'x' ? -22 : 0;
+          const sideways = axis === 'x' ? 0 : 26;
+          return [
+            from,
+            { x: (from.x + to.x) / 2 + sideways, y: (from.y + to.y) / 2 + lift },
+            to,
+          ];
+        };
+
+        const start = waypoints()[0];
+        gsap.set(packet, { x: start.x, y: start.y, opacity: 0 });
 
         paymentFlow.forEach((step, i) => {
           tl.fromTo(
@@ -75,13 +103,21 @@ const PaymentFlow = ({ pinSelector }) => {
                 : { scaleY: 1, duration: 0.5, ease: 'power2.inOut' },
               '>-0.1'
             )
-              .fromTo(
-                dots[i],
-                { ...rest, opacity: 0 },
-                { ...travel, opacity: 1, duration: 0.5, ease: 'power2.inOut' },
+              .to(
+                packet,
+                {
+                  opacity: 1,
+                  duration: 0.5,
+                  ease: 'power1.inOut',
+                  motionPath: {
+                    // Re-measured at run time so a resize cannot strand the arc.
+                    path: () => hop(waypoints()[i], waypoints()[i + 1]),
+                    curviness: 1.4,
+                  },
+                },
                 '<'
               )
-              .to(dots[i], { opacity: 0, duration: 0.15 }, '>-0.05');
+              .to(packet, { opacity: 0, duration: 0.16 }, '>-0.06');
           }
         });
 
@@ -151,7 +187,9 @@ const PaymentFlow = ({ pinSelector }) => {
       </figcaption>
 
       <div className="px-4 py-6">
-        <ol className="flex flex-col items-stretch gap-0 sm:flex-row sm:items-center">
+        <div className="flow-track-area">
+          <span className="flow-packet" aria-hidden="true" />
+          <ol className="flex flex-col items-stretch gap-0 sm:flex-row sm:items-center">
           {paymentFlow.map((step, i) => (
             <li key={step.key} className="contents">
               <div className="flow-node" data-settled={settled ? 'true' : undefined}>
@@ -163,12 +201,12 @@ const PaymentFlow = ({ pinSelector }) => {
                 <div className="flow-link" aria-hidden="true">
                   <span className="flow-track" />
                   <span className="flow-fill" />
-                  <span className="flow-dot" />
                 </div>
               )}
             </li>
           ))}
-        </ol>
+          </ol>
+        </div>
 
         <p ref={captionRef} className="mono mt-6 text-xs text-ink-subtle" aria-hidden="true">
           {paymentFlow[settled ? paymentFlow.length - 1 : 0].caption}

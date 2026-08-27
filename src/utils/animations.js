@@ -1,9 +1,10 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
+gsap.registerPlugin(ScrollTrigger, SplitText, MotionPathPlugin, useGSAP);
 
 /**
  * Motion tokens. Deliberately restrained: short distances, quick durations,
@@ -64,8 +65,13 @@ export const reveal = (targets, options = {}) => {
  * Line-by-line masked reveal for a heading. The lines are clipped by their own
  * wrapper, so each one rises out of a hard edge rather than fading in place.
  *
- * Returns a revert() the caller must run on cleanup — SplitText rewrites the
- * element's DOM, and React needs it handed back intact.
+ * **The split is reverted the moment the animation ends**, not on unmount.
+ * SplitText rewrites the element into per-line wrappers with overflow clipped,
+ * and leaving that in place for the life of the page has costs beyond the
+ * animation: the clip cuts descenders (the j in "Njovu" loses its tail),
+ * selecting the text yields fragments, and the wrappers do not reflow on
+ * resize the way the original element does. Reverting hands the real element
+ * back the instant it is no longer needed.
  */
 export const revealHeading = (element, options = {}) => {
   const { stagger = 0.08, delay = 0, duration = 0.9 } = options;
@@ -75,13 +81,21 @@ export const revealHeading = (element, options = {}) => {
 
   const split = new SplitText(element, { type: 'lines', mask: 'lines' });
 
+  let reverted = false;
+  const revertSplit = () => {
+    if (reverted) return;
+    reverted = true;
+    split.revert();
+  };
+
   const tween = gsap.fromTo(
     split.lines,
     { yPercent: 105 },
-    { yPercent: 0, duration, delay, stagger, ease: 'expo.out' }
+    { yPercent: 0, duration, delay, stagger, ease: 'expo.out', onComplete: revertSplit }
   );
 
-  tween.revertSplit = () => split.revert();
+  // Still exposed so an unmount mid-animation cleans up too.
+  tween.revertSplit = revertSplit;
   return tween;
 };
 
@@ -91,4 +105,4 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
   window.ScrollTrigger = ScrollTrigger;
 }
 
-export { gsap, ScrollTrigger, SplitText, useGSAP };
+export { gsap, ScrollTrigger, SplitText, MotionPathPlugin, useGSAP };

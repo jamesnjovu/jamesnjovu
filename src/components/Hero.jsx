@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { FaGithub, FaLinkedin, FaArrowRight } from 'react-icons/fa';
 import { gsap, useGSAP, MOTION, revealHeading, prefersReducedMotion } from '../utils/animations';
-import { profile, builtWith } from '../content';
+import { profile } from '../content';
 import PaymentFlow from './PaymentFlow';
 import Portrait from '../assets/james-profile.jpg';
 
@@ -141,20 +141,6 @@ const Hero = () => {
           <PaymentFlow pinSelector="#top" />
         </div>
 
-        <p className="hero-item mt-3 text-xs text-ink-subtle">
-          This page is the demo: {builtWith.join(', ')} — the hero is pinned with ScrollTrigger and the
-          transaction above is <span className="text-ink">scrubbed by your scroll</span>, built with{' '}
-          <code className="mono">gsap.matchMedia</code> and animated custom properties.{' '}
-          <a
-            href="https://github.com/jamesnjovu/jamesnjovu"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link-accent"
-          >
-            Read the source
-          </a>
-          .
-        </p>
       </div>
 
       <div

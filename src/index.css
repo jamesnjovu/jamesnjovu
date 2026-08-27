@@ -388,6 +388,13 @@
     }
   }
 
+  /* A downward-drifting tick under the scroll cue. */
+  .scroll-cue {
+    width: 1px;
+    height: 1.75rem;
+    background: linear-gradient(to bottom, var(--border-strong), transparent);
+  }
+
   /* ---- Scrollbar --------------------------------------------------- */
 
   ::-webkit-scrollbar {

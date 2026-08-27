@@ -85,4 +85,10 @@ export const revealHeading = (element, options = {}) => {
   return tween;
 };
 
+// Dev-only handle so animations can be inspected from the console.
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  window.gsap = gsap;
+  window.ScrollTrigger = ScrollTrigger;
+}
+
 export { gsap, ScrollTrigger, SplitText, useGSAP };

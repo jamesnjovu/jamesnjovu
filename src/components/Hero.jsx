@@ -15,6 +15,7 @@ const Hero = () => {
   const root = useRef(null);
   const nameRef = useRef(null);
   const ctaRef = useRef(null);
+  const cueRef = useRef(null);
   const years = new Date().getFullYear() - profile.startYear;
 
   useGSAP(
@@ -32,6 +33,14 @@ const Hero = () => {
           { opacity: 1, y: 0, duration: 0.55, stagger: 0.08 },
           0.45
         );
+
+      // The cue has done its job the moment the reader takes the hint.
+      gsap.to(cueRef.current, {
+        opacity: 0,
+        y: 8,
+        ease: 'none',
+        scrollTrigger: { start: 0, end: 220, scrub: true },
+      });
 
       // The CTA leans toward the pointer, then springs back on exit.
       const cta = ctaRef.current;
@@ -63,7 +72,11 @@ const Hero = () => {
   );
 
   return (
-    <section id="top" ref={root} className="pb-20 pt-32 sm:pt-36">
+    <section
+      id="top"
+      ref={root}
+      className="relative flex min-h-svh flex-col justify-center overflow-hidden pb-14 pt-20"
+    >
       <div className="shell">
         <div className="flex items-start justify-between gap-8">
           <div className="min-w-0">
@@ -85,9 +98,9 @@ const Hero = () => {
           />
         </div>
 
-        <p className="hero-item mt-6 max-w-prose text-lg text-ink-muted">{profile.summary}</p>
+        <p className="hero-item mt-5 max-w-prose text-base text-ink-muted sm:text-lg">{profile.summary}</p>
 
-        <dl className="hero-item mt-8 flex flex-wrap gap-x-10 gap-y-4">
+        <dl className="hero-item mt-6 flex flex-wrap gap-x-10 gap-y-3">
           <div>
             <dt className="text-xs text-ink-subtle">Experience</dt>
             <dd className="mono mt-0.5 text-base text-ink">{years} years</dd>
@@ -102,7 +115,7 @@ const Hero = () => {
           </div>
         </dl>
 
-        <div className="hero-item mt-9 flex flex-wrap items-center gap-3">
+        <div className="hero-item mt-7 flex flex-wrap items-center gap-3">
           <a ref={ctaRef} href="#contact" className="btn btn-primary">
             Get in touch
             <FaArrowRight size={12} aria-hidden="true" />
@@ -124,13 +137,14 @@ const Hero = () => {
           </div>
         </div>
 
-        <div className="hero-item">
-          <PaymentFlow />
+        <div className="hero-item mt-8">
+          <PaymentFlow pinSelector="#top" />
         </div>
 
-        <p className="hero-item mt-4 text-xs text-ink-subtle">
-          This page is the demo: {builtWith.join(', ')} — the diagram above is a GSAP timeline built with{' '}
-          <code className="mono">matchMedia</code>, ScrollTrigger and animated custom properties.{' '}
+        <p className="hero-item mt-3 text-xs text-ink-subtle">
+          This page is the demo: {builtWith.join(', ')} — the hero is pinned with ScrollTrigger and the
+          transaction above is <span className="text-ink">scrubbed by your scroll</span>, built with{' '}
+          <code className="mono">gsap.matchMedia</code> and animated custom properties.{' '}
           <a
             href="https://github.com/jamesnjovu/jamesnjovu"
             target="_blank"
@@ -141,6 +155,15 @@ const Hero = () => {
           </a>
           .
         </p>
+      </div>
+
+      <div
+        ref={cueRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-6 flex flex-col items-center gap-1.5 text-ink-subtle"
+      >
+        <span className="eyebrow">Scroll to follow the payment</span>
+        <span className="scroll-cue" />
       </div>
     </section>
   );

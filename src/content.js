@@ -12,7 +12,7 @@ export const profile = {
   phone: '+260 978 921730',
   resume: '/jamesnjovu/resume.pdf',
   summary:
-    'I build and maintain mission-critical financial systems in the Elixir/Phoenix ecosystem — mobile-money integrations, high-throughput APIs, and the internal tooling teams rely on. I care about well-factored interfaces, measurable performance work, and libraries other engineers can pick up without reading the source.',
+    'I build mission-critical financial systems in the Elixir/Phoenix ecosystem — mobile-money integrations, high-throughput APIs, and the libraries other engineers build on.',
   links: {
     github: 'https://github.com/jamesnjovu',
     linkedin: 'https://www.linkedin.com/in/james-njovu-0a71181b2/',
